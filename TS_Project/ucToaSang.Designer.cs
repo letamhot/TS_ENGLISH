@@ -55,7 +55,7 @@
             this.lblNoiDungCauHoiVD.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNoiDungCauHoiVD.Location = new System.Drawing.Point(10, 44);
             this.lblNoiDungCauHoiVD.Name = "lblNoiDungCauHoiVD";
-            this.lblNoiDungCauHoiVD.Size = new System.Drawing.Size(667, 337);
+            this.lblNoiDungCauHoiVD.Size = new System.Drawing.Size(695, 322);
             this.lblNoiDungCauHoiVD.TabIndex = 13;
             this.lblNoiDungCauHoiVD.Text = "Nội dung câu hỏi";
             // 
@@ -63,9 +63,9 @@
             // 
             this.pbGoi4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGoi4.BackgroundImage")));
             this.pbGoi4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbGoi4.Location = new System.Drawing.Point(836, 142);
+            this.pbGoi4.Location = new System.Drawing.Point(823, 126);
             this.pbGoi4.Name = "pbGoi4";
-            this.pbGoi4.Size = new System.Drawing.Size(120, 120);
+            this.pbGoi4.Size = new System.Drawing.Size(106, 104);
             this.pbGoi4.TabIndex = 17;
             this.pbGoi4.TabStop = false;
             // 
@@ -73,9 +73,9 @@
             // 
             this.pbGoi2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGoi2.BackgroundImage")));
             this.pbGoi2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbGoi2.Location = new System.Drawing.Point(836, 16);
+            this.pbGoi2.Location = new System.Drawing.Point(823, 16);
             this.pbGoi2.Name = "pbGoi2";
-            this.pbGoi2.Size = new System.Drawing.Size(120, 120);
+            this.pbGoi2.Size = new System.Drawing.Size(106, 104);
             this.pbGoi2.TabIndex = 18;
             this.pbGoi2.TabStop = false;
             // 
@@ -83,9 +83,9 @@
             // 
             this.pbGoi5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGoi5.BackgroundImage")));
             this.pbGoi5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbGoi5.Location = new System.Drawing.Point(771, 268);
+            this.pbGoi5.Location = new System.Drawing.Point(769, 236);
             this.pbGoi5.Name = "pbGoi5";
-            this.pbGoi5.Size = new System.Drawing.Size(120, 120);
+            this.pbGoi5.Size = new System.Drawing.Size(106, 104);
             this.pbGoi5.TabIndex = 19;
             this.pbGoi5.TabStop = false;
             // 
@@ -93,9 +93,9 @@
             // 
             this.pbGoi3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGoi3.BackgroundImage")));
             this.pbGoi3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbGoi3.Location = new System.Drawing.Point(711, 142);
+            this.pbGoi3.Location = new System.Drawing.Point(711, 126);
             this.pbGoi3.Name = "pbGoi3";
-            this.pbGoi3.Size = new System.Drawing.Size(120, 120);
+            this.pbGoi3.Size = new System.Drawing.Size(106, 104);
             this.pbGoi3.TabIndex = 20;
             this.pbGoi3.TabStop = false;
             // 
@@ -105,7 +105,7 @@
             this.pbGoi1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbGoi1.Location = new System.Drawing.Point(711, 16);
             this.pbGoi1.Name = "pbGoi1";
-            this.pbGoi1.Size = new System.Drawing.Size(120, 120);
+            this.pbGoi1.Size = new System.Drawing.Size(106, 104);
             this.pbGoi1.TabIndex = 21;
             this.pbGoi1.TabStop = false;
             // 
@@ -125,7 +125,7 @@
             this.axWinCauHoiHinhAnh.Location = new System.Drawing.Point(39, 146);
             this.axWinCauHoiHinhAnh.Name = "axWinCauHoiHinhAnh";
             this.axWinCauHoiHinhAnh.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWinCauHoiHinhAnh.OcxState")));
-            this.axWinCauHoiHinhAnh.Size = new System.Drawing.Size(456, 247);
+            this.axWinCauHoiHinhAnh.Size = new System.Drawing.Size(378, 217);
             this.axWinCauHoiHinhAnh.TabIndex = 15;
             this.axWinCauHoiHinhAnh.Visible = false;
             // 
@@ -134,27 +134,29 @@
             this.pbDapanCH.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbDapanCH.BackgroundImage")));
             this.pbDapanCH.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbDapanCH.Controls.Add(this.lblDA1);
-            this.pbDapanCH.Location = new System.Drawing.Point(3, 394);
+            this.pbDapanCH.Location = new System.Drawing.Point(3, 381);
             this.pbDapanCH.Name = "pbDapanCH";
-            this.pbDapanCH.Size = new System.Drawing.Size(998, 167);
+            this.pbDapanCH.Size = new System.Drawing.Size(984, 130);
             this.pbDapanCH.TabIndex = 60;
             // 
             // lblDA1
             // 
             this.lblDA1.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDA1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblDA1.Location = new System.Drawing.Point(229, 32);
+            this.lblDA1.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.lblDA1.Location = new System.Drawing.Point(305, 1);
             this.lblDA1.Name = "lblDA1";
-            this.lblDA1.Size = new System.Drawing.Size(676, 104);
+            this.lblDA1.Size = new System.Drawing.Size(645, 130);
             this.lblDA1.TabIndex = 56;
-            this.lblDA1.Text = "label1";
+            this.lblDA1.Text = "Listen to the following piece of music. What is the title of the song and its com" +
+    "poser?  Listen to the following piece of music. What is the title of the song an" +
+    "d its composer?  ";
             this.lblDA1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pbImage
             // 
             this.pbImage.Location = new System.Drawing.Point(39, 142);
             this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(456, 251);
+            this.pbImage.Size = new System.Drawing.Size(378, 221);
             this.pbImage.TabIndex = 61;
             this.pbImage.TabStop = false;
             // 
@@ -174,7 +176,7 @@
             this.Controls.Add(this.axWinCauHoiHinhAnh);
             this.Controls.Add(this.lblNoiDungCauHoiVD);
             this.Name = "ucToaSang";
-            this.Size = new System.Drawing.Size(1004, 530);
+            this.Size = new System.Drawing.Size(990, 514);
             ((System.ComponentModel.ISupportInitialize)(this.pbGoi4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGoi2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGoi5)).EndInit();

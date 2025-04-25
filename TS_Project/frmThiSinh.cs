@@ -148,37 +148,25 @@ namespace TS_Project
             try
             {
                 int nBytesRec = socks.EndReceive(ar);
-
                 if (nBytesRec > 0)
                 {
                     string sRecieved = Encoding.ASCII.GetString(byBuff, 0, nBytesRec);
 
+                    // Kiểm tra xem form đã được khởi tạo và có handle chưa
                     if (this.IsHandleCreated)
                     {
                         this.BeginInvoke(addMessage, new string[] { sRecieved });
                     }
+                    else
+                    {
+                        Console.WriteLine("Handle chưa được tạo.");
+                    }
 
-                    SetupRecieveCallback(socks); // Tiếp tục nhận gói tiếp theo
+                    SetupRecieveCallback(socks);
                 }
                 else
                 {
-                    // Client ngắt kết nối hợp lệ (EndReceive trả về 0 byte)
-                    Console.WriteLine($"Client {socks.RemoteEndPoint} đã ngắt kết nối.");
-                    socks.Shutdown(SocketShutdown.Both);
-                    socks.Close();
-                }
-            }
-            catch (ObjectDisposedException)
-            {
-                // Socket đã bị đóng – bỏ qua
-                Console.WriteLine("Socket đã đóng.");
-            }
-            catch (SocketException se)
-            {
-                // Lỗi socket – có thể do ngắt kết nối đột ngột
-                Console.WriteLine($"Socket error: {se.Message}");
-                if (socks.Connected)
-                {
+                    Console.WriteLine("Client {0}, disconnected", socks.RemoteEndPoint);
                     socks.Shutdown(SocketShutdown.Both);
                     socks.Close();
                 }
@@ -188,7 +176,6 @@ namespace TS_Project
                 MessageBox.Show(this, ex.Message, "Lỗi xảy ra khi nhận kết quả trả về!");
             }
         }
-
         public void OnAddMessage(string sMessage)
         {
             //Cấu trúc tin nhắn từ server x,y,z
@@ -274,6 +261,12 @@ namespace TS_Project
                             }
                             if (spl[4] == "stop")
                             {
+                                lblTongDiem.Visible = true;
+
+                            }
+                            if (spl[4] == "hienthidapanCT")
+                            {
+                                lblTongDiem.Visible = true;
 
                             }
                             if (spl[4] == "hienthidiemKP")
@@ -637,6 +630,20 @@ namespace TS_Project
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, x2, da, false, false));
                             }
+                            else if (spl[5] == "start_ngoisaohivong")
+                            {
+                                x2 = true;
+                                pnlNoiDung.Controls.Clear();
+
+                                pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), false, x2, da, false, false));
+                            }
+                            else if (spl[5] == "start_Nongoisaohivong")
+                            {
+                                x2 = false;
+                                pnlNoiDung.Controls.Clear();
+
+                                pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), false, x2, da, false, false));
+                            }
 
                         }
                     }
@@ -719,6 +726,20 @@ namespace TS_Project
                                 da = true;
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucToaSang(sock, int.Parse(spl[0]), int.Parse(spl[4]), tt, x2, da, false, false));
+                            }
+                            else if (spl[5] == "start_ngoisaohivong")
+                            {
+                                x2 = true;
+                                pnlNoiDung.Controls.Clear();
+
+                                pnlNoiDung.Controls.Add(new ucToaSang(sock, int.Parse(spl[0]), int.Parse(spl[4]), false, x2, da, false, false));
+                            }
+                            else if (spl[5] == "start_Nongoisaohivong")
+                            {
+                                x2 = false;
+                                pnlNoiDung.Controls.Clear();
+
+                                pnlNoiDung.Controls.Add(new ucToaSang(sock, int.Parse(spl[0]), int.Parse(spl[4]), false, x2, da, false, false));
                             }
                         }
                     }
@@ -894,18 +915,42 @@ namespace TS_Project
 
         private void btnCloseTS_Click(object sender, EventArgs e)
         {
-
             try
             {
-
-
-                Application.Exit();
+                // Gửi thông điệp đóng nếu cần
                 SendEvent(id.ToString() + ",cli,connected,off");
-                sock.Shutdown(SocketShutdown.Both);
-                sock.Close();
 
+                // Đảm bảo socket đã khởi tạo và chưa bị dispose
+                if (sock != null && sock.Connected)
+                {
+                    try
+                    {
+                        sock.Shutdown(SocketShutdown.Both);
+                    }
+                    catch (SocketException ex)
+                    {
+                        Console.WriteLine("Socket shutdown error: " + ex.Message);
+                    }
+
+                    try
+                    {
+                        sock.Close();
+                    }
+                    catch (SocketException ex)
+                    {
+                        Console.WriteLine("Socket close error: " + ex.Message);
+                    }
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on pbClose: " + ex.Message);
+            }
+            finally
+            {
+                // Thoát ứng dụng sau khi đã xử lý mọi thứ
+                Application.Exit();
+            }
         }
 
         private void btnMiniTS_Click(object sender, EventArgs e)

@@ -22,7 +22,7 @@ namespace TS_Project
         private int _goicauhoiid = 0;
         private bool _tt = false;
         private bool _isVideoStart = false;
-        private bool _resetgoi;
+        private bool _isReady;
         private bool _x2 = false;
         private bool _da = false;
         private bool _trangThaiCau = false;
@@ -33,7 +33,7 @@ namespace TS_Project
             InitializeComponent();
         }
 
-        public ucToaSang(Socket sock, int doiid, int cauhoiid, bool isStart, bool x2, bool da, bool trangthai, bool resetgoi)
+        public ucToaSang(Socket sock, int doiid, int cauhoiid, bool isStart, bool x2, bool da, bool trangthai, bool isReady)
         {
             InitializeComponent();
             _socket = sock;
@@ -41,7 +41,7 @@ namespace TS_Project
             _cauhoiid = cauhoiid;
             _tt = trangthai;
             _isVideoStart = isStart;
-            _resetgoi = resetgoi;
+            _isReady = isReady;
             _x2 = x2;
             _da = da;
             loadUC();
@@ -167,13 +167,22 @@ namespace TS_Project
                                     }
                                     else
                                     {
-                                        axWinCauHoiHinhAnh.Visible = true;
-                                        axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
-                                        axWinCauHoiHinhAnh.Ctlcontrols.play();
+                                        if (_isVideoStart)
+                                        {
+                                            axWinCauHoiHinhAnh.Visible = true;
+                                            axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
+                                            axWinCauHoiHinhAnh.Ctlcontrols.play();
+                                        }
+                                        else
+                                        {
+                                            axWinCauHoiHinhAnh.Visible = false;
+                                            axWinCauHoiHinhAnh.Ctlcontrols.stop();
+                                        }
+
                                         if (_da)
                                         {
                                             axWinCauHoiHinhAnh.Visible = false;
-                                            //pbDACH.Visible = false;
+                                            axWinCauHoiHinhAnh.Ctlcontrols.stop();                                            //pbDACH.Visible = false;
                                             pbDapanCH.Visible = true;
                                             //lblDA.Visible = false;
                                             lblDA1.Visible = true;
@@ -457,23 +466,23 @@ namespace TS_Project
                             {
                                 case 1:
                                     pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts1_ns.png");
+                                    pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\1-star.png");
                                     break;
                                 case 2:
                                     pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts2_ns.png");
+                                    pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\2-star.png");
                                     break;
                                 case 3:
                                     pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts3_ns.png"); ;
+                                    pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\3-star.png"); ;
                                     break;
                                 case 4:
                                     pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts4_ns.png"); ;
+                                    pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\4-star.png"); ;
                                     break;
                                 case 5:
                                     pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts5_ns.png"); ;
+                                    pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\5-star.png"); ;
                                     break;
 
                             }
@@ -511,23 +520,23 @@ namespace TS_Project
                         {
                             case 1:
                                 pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts1.png");
+                                pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\1-dis.png");
                                 break;
                             case 2:
                                 pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts2.png");
+                                pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\2-dis.png");
                                 break;
                             case 3:
                                 pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts3.png"); ;
+                                pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\3-dis.png"); ;
                                 break;
                             case 4:
                                 pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts4.png"); ;
+                                pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\4-dis.png"); ;
                                 break;
                             case 5:
                                 pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts5.png"); ;
+                                pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\5-dis.png"); ;
                                 break;
 
                         }

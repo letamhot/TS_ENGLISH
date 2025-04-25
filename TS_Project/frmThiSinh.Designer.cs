@@ -45,27 +45,27 @@
             // lblTenThiSinh
             // 
             this.lblTenThiSinh.BackColor = System.Drawing.Color.Transparent;
-            this.lblTenThiSinh.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTenThiSinh.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTenThiSinh.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblTenThiSinh.Location = new System.Drawing.Point(523, 147);
             this.lblTenThiSinh.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTenThiSinh.Name = "lblTenThiSinh";
-            this.lblTenThiSinh.Size = new System.Drawing.Size(315, 54);
+            this.lblTenThiSinh.Size = new System.Drawing.Size(388, 54);
             this.lblTenThiSinh.TabIndex = 0;
-            this.lblTenThiSinh.Text = "Tên thí sinh";
+            this.lblTenThiSinh.Text = "NGUYỄN TRẦN HOÀNG GIANG";
             this.lblTenThiSinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblTenTruong
             // 
             this.lblTenTruong.BackColor = System.Drawing.Color.Transparent;
-            this.lblTenTruong.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTenTruong.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTenTruong.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lblTenTruong.Location = new System.Drawing.Point(977, 147);
             this.lblTenTruong.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTenTruong.Name = "lblTenTruong";
-            this.lblTenTruong.Size = new System.Drawing.Size(315, 58);
+            this.lblTenTruong.Size = new System.Drawing.Size(391, 58);
             this.lblTenTruong.TabIndex = 0;
-            this.lblTenTruong.Text = "Tên trường";
+            this.lblTenTruong.Text = "TRƯỜNG THCS THỊ TRẤN QUÁN HÀU";
             this.lblTenTruong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblThoiGian
