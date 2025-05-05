@@ -135,7 +135,23 @@ namespace TS_Project
             ds_cauhoithuthach khamPha = _entities.ds_cauhoithuthach.Find(cauHoiId);
             if (khamPha != null)
             {
-                lblThele.Text = "Question number " + khamPha.vitri + ":";
+                //Hiển thị loại câu hỏi theo vị trí
+                if (khamPha.vitri == 1 || khamPha.vitri == 2)
+                {
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following words or phrases to make a complete sentence";
+
+                }
+                else if (khamPha.vitri == 3 || khamPha.vitri == 4)
+                {
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful conversation";
+
+                }
+                else
+                {
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful paragraph";
+
+                }
+                //lblThele.Text = "Question number " + khamPha.vitri + ":";
                 // Cấu hình FlowLayoutPanel
                 flowPanelSentences.Controls.Clear();
                 flowPanelSentences.FlowDirection = FlowDirection.TopDown;

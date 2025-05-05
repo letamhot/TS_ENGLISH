@@ -49,7 +49,7 @@ namespace TS_Project
             if (_goicauhoiid == 0)
             {
                 invisibleGui();
-                lblThele.Text = "Please invite candidate " + tends.tennguoichoi.ToUpper() + " chooses question package!";
+                lblThele.Text = "Question package!";
                 // Reset all packages to available state when starting new selection
                 ResetAllPackageStates();
             }
