@@ -52,19 +52,29 @@ namespace TS_Project
             if (_cauhoiid == 0)
             {
                 VisibleGui();
-                //lblGioiThieu.Text = "Mỗi thí sinh sẽ chọn 01 gói câu hỏi trong bộ 06 gói câu hỏi của BTC. Nội dung câu hỏi liên quan đến các kiến thức chung.\nMỗi bộ câu hỏi gồm 04 câu, trong đó: Câu 1: 10 điểm, câu 2: 20 điểm, câu 3: 20 điểm, câu 4: 30 điểm.\nThời gian suy nghĩ và trả lời cho mỗi câu hỏi là 10 giây.\nNếu thí sinh chọn gói câu hỏi trả lời đúng thì dành điểm tuyệt đối, trả lời sai các thí sinh còn lại dành quyền trả lời. Nếu thí sinh dành quyền trả lời mà trả lời đúng thì sẽ dành được điểm tuyệt đối, thí sinh chọn gói câu hỏi sẽ bị trừ số điểm tương ứng của câu hỏi đó.\nNếu thí sinh dành câu hỏi trả lời mà trả lời sai thì bị trừ 1 nửa số điểm của câu hỏi. Thí sinh chọn gói câu hỏi không bị trừ điểm.\nThí sinh có quyền 01 lần đặt cược để nhân đôi số điểm của mình. Khi đặt cược mà trả lời sai sẽ bị trừ số điểm đã nhân cược.\nĐiểm tối đa cho mỗi thí sinh ở phần thi này: 100 điểm(chưa kể điểm cược).";
                 lblThele.Text = "Four Candidates will answer five questions";
+                // Reset all question states when starting new round
+                ResetAllQuestionStates();
             }
             else
             {
                 EnabledGui();
                 ds_doi doiDangChoi = _entities.ds_doi.Find(_doiid);
                 lblThele.Visible = true;
+
                 if (_cauhoiid > 0)
                 {
+                    // First update all question states based on database
+                    UpdateAllQuestionStates();
+
                     ds_goicauhoishining vd = _entities.ds_goicauhoishining.Find(_cauhoiid);
                     disPlayVeDich(_cauhoiid, (int)vd.vitri, _x2);
+                    loadNutDangChon(_cauhoiid, _x2);
+                    loadNutDaChon(_cauhoiid);
+
                     lblThele.Text = "Question " + vd.vitri + ": (" + vd.sodiem + " points)";
+
+                    // Rest of your question display logic remains the same...
                     if ((bool)!vd.isvideo)
                     {
                         lblNoiDungCauHoiVD.Visible = true;
@@ -380,23 +390,143 @@ namespace TS_Project
 
                     }
 
-
                 }
                 else
                 {
-
                     EnabledGui1();
-                    //lblGioiThieu.Text = "Mỗi thí sinh sẽ chọn 01 gói câu hỏi trong bộ 06 gói câu hỏi của BTC. Nội dung câu hỏi liên quan đến các kiến thức chung.\nMỗi bộ câu hỏi gồm 04 câu, trong đó: Câu 1: 10 điểm, câu 2: 20 điểm, câu 3: 20 điểm, câu 4: 30 điểm.\nThời gian suy nghĩ và trả lời cho mỗi câu hỏi là 10 giây.\nNếu thí sinh chọn gói câu hỏi trả lời đúng thì dành điểm tuyệt đối, trả lời sai các thí sinh còn lại dành quyền trả lời. Nếu thí sinh dành quyền trả lời mà trả lời đúng thì sẽ dành được điểm tuyệt đối, thí sinh chọn gói câu hỏi sẽ bị trừ số điểm tương ứng của câu hỏi đó.\nNếu thí sinh dành câu hỏi trả lời mà trả lời sai thì bị trừ 1 nửa số điểm của câu hỏi. Thí sinh chọn gói câu hỏi không bị trừ điểm.\nThí sinh có quyền 01 lần đặt cược để nhân đôi số điểm của mình. Khi đặt cược mà trả lời sai sẽ bị trừ số điểm đã nhân cược.Điểm tối đa cho mỗi thí sinh ở phần thi này: 100 điểm(chưa kể điểm cược).";
-                    //flpNoiDung.Visible = true;
                     pbDapanCH.Visible = false;
-                    //pbDACH.Visible = false;
-                    //lblDA.Visible = false;
                     lblDA1.Visible = false;
                 }
-                //disableGoiCauHoiKhoiDong(_goicauhoiid);
-                //disableButton();
             }
         }
+        // Danh sách các ID câu hỏi đã hiển thị trước đó
+        private HashSet<int> dsCauHoiDaHienThi = new HashSet<int>();
+        private void ResetAllQuestionStates()
+        {
+            // Reset all picture boxes to default state
+            pbGoi1.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\1-ac.png");
+            pbGoi2.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\2-ac.png");
+            pbGoi3.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\3-ac.png");
+            pbGoi4.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\4-ac.png");
+            pbGoi5.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\5-ac.png");
+            // Clear the displayed questions cache
+            dsCauHoiDaHienThi.Clear();
+        }
+
+        private void UpdateAllQuestionStates()
+        {
+            // Get all questions from database
+            var allQuestions = _entities.ds_goicauhoishining.ToList();
+
+            foreach (var question in allQuestions)
+            {
+                switch (question.trangThai)
+                {
+                    case 0: // Not selected - available
+                        SetQuestionImage((int)question.vitri, "ac");
+                        break;
+                    case 1: // Currently selected
+                        SetQuestionImage((int)question.vitri, _x2 ? "star" : "in");
+                        break;
+                    case 2: // Already answered - disabled
+                        SetQuestionImage((int)question.vitri, "dis");
+                        break;
+                }
+            }
+        }
+
+        private void SetQuestionImage(int vitri, string state)
+        {
+            string imagePath = $"{currentPath}\\Resources\\group4\\{vitri}-{state}.png";
+            switch (vitri)
+            {
+                case 1:
+                    pbGoi1.BackgroundImageLayout = ImageLayout.Stretch;
+                    pbGoi1.BackgroundImage = System.Drawing.Image.FromFile(imagePath);
+                    break;
+                case 2:
+                    pbGoi2.BackgroundImageLayout = ImageLayout.Stretch;
+                    pbGoi2.BackgroundImage = System.Drawing.Image.FromFile(imagePath);
+                    break;
+                case 3:
+                    pbGoi3.BackgroundImageLayout = ImageLayout.Stretch;
+                    pbGoi3.BackgroundImage = System.Drawing.Image.FromFile(imagePath);
+                    break;
+                case 4:
+                    pbGoi4.BackgroundImageLayout = ImageLayout.Stretch;
+                    pbGoi4.BackgroundImage = System.Drawing.Image.FromFile(imagePath);
+                    break;
+                case 5:
+                    pbGoi5.BackgroundImageLayout = ImageLayout.Stretch;
+                    pbGoi5.BackgroundImage = System.Drawing.Image.FromFile(imagePath);
+                    break;
+            }
+        }
+
+        private PictureBox GetPictureBoxByVitri(int vitri)
+        {
+            switch (vitri)
+            {
+                case 1: return pbGoi1;
+                case 2: return pbGoi2;
+                case 3: return pbGoi3;
+                case 4: return pbGoi4;
+                case 5: return pbGoi5;
+                default: return null;
+            }
+        }
+
+        void disPlayVeDich(int cauhoiid, int vitri, bool isX2)
+        {
+            var cauhoiTS = _entities.ds_goicauhoishining.Find(cauhoiid);
+            if (cauhoiTS != null && cauhoiTS.vitri == vitri)
+            {
+                // Always update the display based on current state
+                switch (cauhoiTS.trangThai)
+                {
+                    case 1: // Currently selected
+                        SetQuestionImage(vitri, isX2 ? "star" : "in");
+                        break;
+                    case 2: // Already answered
+                        SetQuestionImage(vitri, "dis");
+                        break;
+                    default: // Not selected
+                        SetQuestionImage(vitri, "ac");
+                        break;
+                }
+
+                // Add to displayed questions cache
+                if (!dsCauHoiDaHienThi.Contains(cauhoiid))
+                {
+                    dsCauHoiDaHienThi.Add(cauhoiid);
+                }
+            }
+        }
+
+        private void loadNutDangChon(int cauhoiid, bool isX2)
+        {
+            var dsCauChon = _entities.ds_goicauhoishining
+                .Where(x => x.cauhoiid == cauhoiid && x.trangThai == 1)
+                .ToList();
+
+            foreach (var cauHoi in dsCauChon)
+            {
+                SetQuestionImage((int)cauHoi.vitri, isX2 ? "star" : "in");
+            }
+        }
+
+        private void loadNutDaChon(int cauhoiid)
+        {
+            var dsCauDaChon = _entities.ds_goicauhoishining
+                .Where(x => x.cauhoiid == cauhoiid && x.trangThai == 2)
+                .ToList();
+
+            foreach (var cauHoi in dsCauDaChon)
+            {
+                SetQuestionImage((int)cauHoi.vitri, "dis");
+            }
+        }
+
         public void VisibleGui()
         {
             //lblGioiThieu.Visible = true;
@@ -441,138 +571,6 @@ namespace TS_Project
             pbGoi4.Visible = true;
             pbGoi5.Visible = true;
             //pbGoi6.Visible = true;
-
-        }
-        // Danh sách các ID câu hỏi đã hiển thị trước đó
-        private HashSet<int> dsCauHoiDaHienThi = new HashSet<int>();
-        void disPlayVeDich(int cauhoiid, int vitri, bool isX2)
-        {
-           var cauhoiTS = _entities.ds_goicauhoishining.Find(cauhoiid);
-            if (cauhoiTS != null)
-            {
-
-                if (cauhoiTS.vitri == vitri)
-                {
-                    // Nếu câu hỏi này đã được hiển thị rồi, không update lại nữa
-                    if (dsCauHoiDaHienThi.Contains(cauhoiid))
-                        return;
-
-                    if (cauhoiTS.trangThai == 1)
-                    {
-                        if (isX2)
-                        {
-
-                            switch (cauhoiTS.vitri)
-                            {
-                                case 1:
-                                    pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\1-star.png");
-                                    break;
-                                case 2:
-                                    pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\2-star.png");
-                                    break;
-                                case 3:
-                                    pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\3-star.png"); ;
-                                    break;
-                                case 4:
-                                    pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\4-star.png"); ;
-                                    break;
-                                case 5:
-                                    pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\5-star.png"); ;
-                                    break;
-
-                            }
-                        }
-                        else
-                        {
-                            switch (cauhoiTS.vitri)
-                            {
-                                case 1:
-                                    pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts1_in.png");
-                                    break;
-                                case 2:
-                                    pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts2_in.png");
-                                    break;
-                                case 3:
-                                    pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts3_in.png"); ;
-                                    break;
-                                case 4:
-                                    pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts4_in.png"); ;
-                                    break;
-                                case 5:
-                                    pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                    pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts5_in.png"); ;
-                                    break;
-
-                            }
-                        }
-                    }
-                    else if (cauhoiTS.trangThai == 0) {
-                        switch (cauhoiTS.vitri)
-                        {
-                            case 1:
-                                pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\1-dis.png");
-                                break;
-                            case 2:
-                                pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\2-dis.png");
-                                break;
-                            case 3:
-                                pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\3-dis.png"); ;
-                                break;
-                            case 4:
-                                pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\4-dis.png"); ;
-                                break;
-                            case 5:
-                                pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\5-dis.png"); ;
-                                break;
-
-                        }
-                    }
-                    else
-                    {
-                        switch (cauhoiTS.vitri)
-                        {
-                            case 1:
-                                pbGoi1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi1.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts1_un.png");
-                                break;
-                            case 2:
-                                pbGoi2.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi2.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts2_un.png");
-                                break;
-                            case 3:
-                                pbGoi3.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi3.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts3_un.png"); ;
-                                break;
-                            case 4:
-                                pbGoi4.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi4.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts4_un.png"); ;
-                                break;
-                            case 5:
-                                pbGoi5.SizeMode = PictureBoxSizeMode.StretchImage;
-                                pbGoi5.Image = System.Drawing.Image.FromFile(currentPath + "\\Resources\\group4\\ts5_un.png"); ;
-                                break;
-
-                        }
-                    }
-                    // Thêm câu hỏi này vào danh sách đã hiển thị
-                    dsCauHoiDaHienThi.Add(cauhoiid);
-
-                }
-            }
 
         }
     }

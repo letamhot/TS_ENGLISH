@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AxWMPLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +20,7 @@ namespace TS_Project
         private int _doiid = 0;
         private int _cauchude = 0, _cauhoiphuid = 0;
         private bool _isStart;
+        private bool _isReadyOrOther;
         private bool _tt;
         private string currentPath = Directory.GetCurrentDirectory();
         QuaMienDiSanEntities _entities = new QuaMienDiSanEntities();
@@ -28,7 +30,7 @@ namespace TS_Project
             InitializeComponent();
         }
 
-        public ucKhamPhaCS(Socket sock, int doiid, int cauchudeid, int cauhoiphuid, bool trangthai, bool start)
+        public ucKhamPhaCS(Socket sock, int doiid, int cauchudeid, int cauhoiphuid, bool trangthai, bool start ,bool isReadyOrOther = false)
         {
             InitializeComponent();
             _socket = sock;
@@ -37,6 +39,7 @@ namespace TS_Project
             _tt = trangthai;
             _cauchude = cauchudeid;
             _cauhoiphuid = cauhoiphuid;
+            _isReadyOrOther = isReadyOrOther;
             loadUC();
         }
 
@@ -70,53 +73,105 @@ namespace TS_Project
 
                         if (thisinh != null)
                         {
-                            lblThele.Text = "EXAM TOPIC CONTENT";
-                            lblCauHoiChinh.Text = cauHoiChinhCP.chude;
+                            lblCauHoiChinh.Text = "TOPIC: " +cauHoiChinhCP.chude;
                         }
                     }
                 }
 
+                // Kiểm tra trạng thái _tt
                 if (_tt)
                 {
                     onoffCauhoi(true);
-                    pBCauHoiChinhCP.Visible= false;
-                    if (_cauhoiphuid > 0) {
+                    pBCauHoiChinhCP.Visible = false;
+                    if (_cauhoiphuid > 0)
+                    {
                         lsCauHoiPhuCP = _entities.ds_goicaudiscovery.Where(x => x.cauhoichaid == cauHoiChinhCP.cauhoiid).ToList();
                         ds_goicaudiscovery cauHoiPhu = lsCauHoiPhuCP.FirstOrDefault(x => x.cauhoiid == _cauhoiphuid);
                         LoadAnhPhuDaLat(_cauchude, thisinh.doiid);
-
-
                     }
-
                 }
                 else
                 {
                     onoffCauhoi(false);
                     pBCauHoiChinhCP.Visible = true;
 
-                    if (_isStart)
-                    {
-                        pBCauHoiChinhCP.Image = Image.FromFile(currentPath + "\\Resources\\pic\\" + cauHoiChinhCP.noidungthisinh);
-                        pBCauHoiChinhCP.BackgroundImageLayout = ImageLayout.Stretch;
-                        pBCauHoiChinhCP.SizeMode = PictureBoxSizeMode.StretchImage;
+                    string fileName = cauHoiChinhCP.noidungchude;
+                    string imagePath = Path.Combine(currentPath, "Resources", "pic", fileName);
+                    string videoPath = Path.Combine(currentPath, "Resources", "Video", fileName);
+                    string extension = Path.GetExtension(fileName).ToLower();
 
+                    // Kiểm tra giá trị của isReadyOrOther
+                    if (_isReadyOrOther)
+                    {
+                        // isReadyOrOther = true: Kiểm tra video và phát video nếu có
+                        if (extension == ".mp4" || extension == ".avi" || extension == ".mov" || extension == ".wmv" || extension == ".mkv")
+                        {
+                            if (File.Exists(videoPath))
+                            {
+                                axWindowsMediaPlayer1.URL = videoPath;
+                                axWindowsMediaPlayer1.Visible = true;
+                                axWindowsMediaPlayer1.Ctlcontrols.play();
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("Không tìm thấy file video: " + videoPath);
+                            }
+                        }
+                        else
+                        {
+                            // Không phải video, hiển thị hình ảnh
+                            if (File.Exists(imagePath))
+                            {
+                                pBCauHoiChinhCP.BackgroundImage = Image.FromFile(imagePath);
+                                pBCauHoiChinhCP.BackgroundImageLayout = ImageLayout.Stretch;
+                                pBCauHoiChinhCP.Visible = true;
+                                axWindowsMediaPlayer1.Visible = false;
+                                axWindowsMediaPlayer1.Ctlcontrols.stop();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Không tìm thấy file ảnh: " + imagePath);
+                            }
+                        }
                     }
                     else
                     {
-                        pBCauHoiChinhCP.Image = Image.FromFile(currentPath + "\\Resources\\pic\\" + cauHoiChinhCP.noidungchude);
-                        pBCauHoiChinhCP.BackgroundImageLayout = ImageLayout.Stretch;
-                        pBCauHoiChinhCP.SizeMode = PictureBoxSizeMode.StretchImage;
-
+                        // isReadyOrOther = false: Kiểm tra video và hiển thị video nếu có, không phát
+                        if (extension == ".mp4" || extension == ".avi" || extension == ".mov" || extension == ".wmv" || extension == ".mkv")
+                        {
+                            if (File.Exists(videoPath))
+                            {
+                                axWindowsMediaPlayer1.URL = videoPath;
+                                axWindowsMediaPlayer1.Visible = true;
+                                axWindowsMediaPlayer1.Ctlcontrols.stop();  // Không phát video khi isReadyOrOther = false
+                            }
+                            else
+                            {
+                                MessageBox.Show("Không tìm thấy file video: " + videoPath);
+                            }
+                        }
+                        else
+                        {
+                            // Không phải video, hiển thị hình ảnh
+                            if (File.Exists(imagePath))
+                            {
+                                pBCauHoiChinhCP.BackgroundImage = Image.FromFile(imagePath);
+                                pBCauHoiChinhCP.BackgroundImageLayout = ImageLayout.Stretch;
+                                pBCauHoiChinhCP.Visible = true;
+                                axWindowsMediaPlayer1.Visible = false;
+                                axWindowsMediaPlayer1.Ctlcontrols.stop();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Không tìm thấy file ảnh: " + imagePath);
+                            }
+                        }
                     }
-
                 }
-
-
-
-
-
             }
         }
+
         private void LoadAnhPhuDaLat(int cauchude, int doiid)
         {
             var dsAnhDaLat = _entities.ds_goicaudiscovery
@@ -175,9 +230,7 @@ namespace TS_Project
 
             onoffCauhoi(true);
 
-            //lblGioiThieu.Visible = true;
-            lblThele.Visible = true;
-            //lblGioiThieu.Text = "Sẽ có một bức tranh bí ẩn về mảnh đất, con người và các sự kiện lớn của tỉnh Quảng Bình.\nBức tranh gồm 8 mảnh ghép, mỗi mảnh ghép tương ứng với một câu hỏi phụ.\nĐể trả lời đúng nội dung bức tranh, các thí sinh lần lượt lựa chọn mảnh ghép và trả lời sau 10 giây suy nghĩ.\nNếu trả lời đúng, thí sinh sẽ dành 20 điểm/câu; trả lời sai hoặc không có câu trả lời, 01 trong 03 thí sinh còn lại có cơ hội dành quyền trả lời. Nếu thí sinh dành câu hỏi trả lời đúng thì được cộng 20 điểm (thí sinh chọn mảnh ghép sẽ bị trừ 20 điểm), nếu trả lời sai thì bị trừ 10 điểm (thí sinh chọn mảnh ghép không bị trừ  điểm).\nKhi có mảnh ghép đầu tiên mở ra, các thí sinh có quyền bấm chuông để trả lời câu hỏi của bức tranh.\nTrả lời đúng được điểm, trả lời sai thí sinh đó mất quyền thi tiếp phần thi này.Nếu trả lời câu hỏi chính đúng sau khi ô thứ nhất được mở thí sinh đó đạt 80 điểm, nếu trả lời khi ô thứ hai được mở thí sinh đó đạt 70 điểm, khi ô thứ ba mở là 60 điểm, khi ô thứ tư mở là 50 điểm, khi ô thứ năm mở là 40 điểm, khi ô thứ sáu mở là 30 điểm, khi ô thứ bảy mở là 20 điểm, khi ô cuối cùng được mở ra, thí sinh trả lời đúng câu hỏi chính sẽ được 10 điểm.\nĐiểm tối đa cho phần thi này của mỗi thí sinh là 100 điểm.";
+           
         }
 
         private void visibleGui()
@@ -191,7 +244,6 @@ namespace TS_Project
             pbCau4.Visible = true;
             pbCau5.Visible = true;
             pbCau6.Visible = true;
-            lblThele.Visible = true;
             //lblGioiThieu.Visible = false;
 
         }

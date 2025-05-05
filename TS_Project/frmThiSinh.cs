@@ -194,8 +194,8 @@ namespace TS_Project
                         lblThoiGian.ForeColor = Color.White;
                         lblTenThiSinh.ForeColor = Color.White;
                         lblTenTruong.ForeColor = Color.White;
-                        lblTenThiSinh.Location = new Point(528, 172);
-                        lblTenTruong.Location = new Point(982, 172);
+                        lblTenThiSinh.Location = new Point(430, 147);
+                        lblTenTruong.Location = new Point(884, 147);
 
                         TongDiemKD();
                         pnlNoiDung.Controls.Clear();
@@ -206,7 +206,8 @@ namespace TS_Project
                         lblTenTruong.Visible = false;
                         lblThoiGian.Visible = false;
                         lblTongDiem.Visible = false;
-
+                        ngoisaoSchool.Visible = false;
+                        ngoisaoTS.Visible = false;
                         /*displayTeamInfo();
                         thoiGianConLai = 60;
                         lblThoiGian.Text = thoiGianConLai.ToString();
@@ -216,15 +217,17 @@ namespace TS_Project
                     if (spl[2] == "playthuthach")
                     {
                         lblThoiGian.ForeColor = Color.White;
-                        lblTenThiSinh.ForeColor = Color.Red;
-                        lblTenThiSinh.Location = new Point(523, 147);
-                        lblTenTruong.Location = new Point(977, 147);
-                        lblTenTruong.ForeColor = Color.Red;
+                        lblTenThiSinh.ForeColor = Color.White;
+                        lblTenTruong.ForeColor = Color.White;
+                        lblTenThiSinh.Location = new Point(430, 147);
+                        lblTenTruong.Location = new Point(884, 147);
                         TongDiemKD();
                         lblTongDiem.Visible = true;
 
                         if (spl[3] == "0")
                         {
+                            ngoisaoSchool.Visible = false;
+                            ngoisaoTS.Visible = false;
                             pnlNoiDung.Controls.Clear();
                             this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group\\kp_tl.png");
                             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -235,7 +238,8 @@ namespace TS_Project
                         }
                         else
                         {
-
+                            ngoisaoSchool.Visible = true;
+                            ngoisaoTS.Visible = true;
                             TongDiemKD();
                             displayTeamInfo();
                             thoiGianConLai = 30;
@@ -289,15 +293,16 @@ namespace TS_Project
 
                         TongDiemKD();
 
-                        lblThoiGian.ForeColor = Color.Red;
-                        lblTenThiSinh.ForeColor = Color.Red;
-                        lblTenThiSinh.Location = new Point(528, 172);
-                        lblTenTruong.Location = new Point(982, 172);
+                        lblThoiGian.ForeColor = Color.White;
+                        lblTenThiSinh.ForeColor = Color.White;
+                        lblTenTruong.ForeColor = Color.White;
+                        lblTenThiSinh.Location = new Point(430, 147);
+                        lblTenTruong.Location = new Point(884, 147);
                         lblTongDiem.Visible = true;
-
-                        lblTenTruong.ForeColor = Color.Red;
                         if (spl[3] == "0")
                         {
+                            ngoisaoSchool.Visible = false;
+                            ngoisaoTS.Visible = false;
                             pnlNoiDung.Controls.Clear();
                             this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group\\cp_tl.png");
                             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -308,62 +313,69 @@ namespace TS_Project
                         }
                         else
                         {
+                            ngoisaoSchool.Visible = true;
+                            ngoisaoTS.Visible = true;
                             TongDiemKD();
                             lblTongDiem.Visible = true;
 
                             displayTeamInfo();
                             this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group6\\ts_cp.png");
                             this.BackgroundImageLayout = ImageLayout.Stretch;
+                            
 
                             // Kiểm tra xem mảng spl có đủ phần tử không
                             if (spl.Length > 5)
                             {
-                                if (spl[5] == "ready")
-                                {
-                                    TongDiemKD();
-                                    thoiGianConLai = 180;
-                                    lblThoiGian.Text = thoiGianConLai.ToString();
-                                    pnlNoiDung.Controls.Clear();
-                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false));
-                                    tmClient.Enabled = false;
-
-                                }
                                 if (spl[5] == "start")
                                 {
                                     int cauhoiId = Convert.ToInt32(spl[3]);
                                     var khamPha = _entities.ds_goicaudiscovery.FirstOrDefault(x => x.cauhoiid == cauhoiId && x.trangthai == true);
-                                    if (!string.IsNullOrWhiteSpace(khamPha.noidungthisinh))
+
+                                    if (khamPha != null)
                                     {
                                         pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, true));
-                                        tmClient.Enabled = true;
+
+                                        // Kiểm tra xem có video hay không, nếu có thì chạy video, nếu không thì xử lý hình ảnh
+                                        if (!string.IsNullOrWhiteSpace(khamPha.noidungthisinh))
+                                        {
+                                            pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, true, true)); // Thêm tham số true để phát video
+                                            tmClient.Enabled = true;
+                                        }
+                                        else
+                                        {
+                                            pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false, true));
+                                            tmClient.Enabled = true;
+                                        }
                                     }
-                                    else
-                                    {
-                                        pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false));
-                                        tmClient.Enabled = true;
-                                    }
-                                    
+                                }
+
+                                if (spl[5] == "ready")
+                                {
+                                    thoiGianConLai = 180;
+                                    lblThoiGian.Text = thoiGianConLai.ToString();
+                                    // Khi trạng thái "ready", đảm bảo rằng video không phát
+                                    pnlNoiDung.Controls.Clear();
+                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false, false));  // Hình ảnh
+                                    tmClient.Enabled = false;
                                 }
 
                                 if (spl[5] == "stopTime")
                                 {
+                                    // Khi dừng thời gian, xử lý video nếu có
                                     int cauhoiId = Convert.ToInt32(spl[3]);
                                     var khamPha = _entities.ds_goicaudiscovery.FirstOrDefault(x => x.cauhoiid == cauhoiId && x.trangthai == true);
                                     if (!string.IsNullOrWhiteSpace(khamPha.noidungthisinh))
                                     {
                                         pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]),false, true ));
+                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, true, false)); // Dừng video
                                         tmClient.Enabled = false;
                                     }
                                     else
                                     {
                                         pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false));
+                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false, false)); // Hình ảnh
                                         tmClient.Enabled = false;
                                     }
-
                                 }
                                 if (spl[5] == "hienthianhthisinh")
                                 {
@@ -371,18 +383,18 @@ namespace TS_Project
                                     this.BackgroundImageLayout = ImageLayout.Stretch;
                                     tmClient.Enabled = false;
                                     pnlNoiDung.Controls.Clear();
-                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, true));
+                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, true, false));
                                 }
                                 if (spl[5] == "hienthimanh")
                                 {
                                     pnlNoiDung.Controls.Clear();
-                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, false));
+                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, false, false));
                                     //tmClient.Enabled = true;
                                 }
                                 if (spl[5] == "load6nut")
                                 {
                                     pnlNoiDung.Controls.Clear();
-                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, false));
+                                    pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), true, false, false));
                                     //tmClient.Enabled = true;
                                 }
                                 if (spl[5] == "capnhatTongDiem")
@@ -392,14 +404,14 @@ namespace TS_Project
                                     if (!string.IsNullOrWhiteSpace(khamPha.noidungthisinh))
                                     {
                                         pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, true));
+                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, true, false));
                                         lblTongDiem.Visible = true;
                                         TongDiemKD();
                                     }
                                     else
                                     {
                                         pnlNoiDung.Controls.Clear();
-                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false));
+                                        pnlNoiDung.Controls.Add(new ucKhamPhaCS(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), false, false, false));
                                         lblTongDiem.Visible = true;
                                         TongDiemKD();
                                     }
@@ -417,11 +429,12 @@ namespace TS_Project
                     }
                     if (spl[2] == "playtoasang")
                     {
+                        
                         lblThoiGian.ForeColor = Color.White;
-                        lblTenThiSinh.ForeColor = Color.Red;
-                        lblTenTruong.ForeColor = Color.Red;
-                        lblTenThiSinh.Location = new Point(523, 147);
-                        lblTenTruong.Location = new Point(977, 147);
+                        lblTenThiSinh.ForeColor = Color.White;
+                        lblTenTruong.ForeColor = Color.White;
+                        lblTenThiSinh.Location = new Point(430, 147);
+                        lblTenTruong.Location = new Point(884, 147);
                         TongDiemKD();
                         bool trangThaiHienThiCau = false;
                         bool x2 = false;
@@ -429,6 +442,8 @@ namespace TS_Project
                         bool tt = false;
                         if (spl[5] == "0")
                         {
+                            ngoisaoSchool.Visible = false;
+                            ngoisaoTS.Visible = false;
                             pnlNoiDung.Controls.Clear();
                             this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group\\vd_tl.png");
                             this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -440,6 +455,8 @@ namespace TS_Project
                         }
                         else
                         {
+                            ngoisaoSchool.Visible = true;
+                            ngoisaoTS.Visible = true;
                             lblTongDiem.Visible = true;
                             TongDiemKD();
                             thoiGianConLai = 20;
@@ -518,6 +535,8 @@ namespace TS_Project
                     }
                     if (spl[2] == "playgioithieu")
                     {
+                        ngoisaoSchool.Visible = false;
+                        ngoisaoTS.Visible = false;
                         pnlNoiDung.Controls.Clear();
                         this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group6\\gt_qmds.png");
                         this.BackgroundImageLayout = ImageLayout.Stretch;
@@ -537,11 +556,12 @@ namespace TS_Project
                     {
                         if (spl[2] == "playkhoidong")
                         {
+                            ngoisaoSchool.Visible = true;
+                            ngoisaoTS.Visible = true;
                             TongDiemKD();
                             displayTeamInfo();
                             lblTongDiem.Visible = true;
-                            /* pnlNoiDung.Controls.Clear();
-                             pnlNoiDung.Controls.Add(new ucKhoiDong(sock, int.Parse(spl[0]), 0, 0, ttGoiKD, false));*/
+
                             if (spl[5] == "start")
                             {
                                 thoiGianConLai = 60;
@@ -550,11 +570,14 @@ namespace TS_Project
                                 lblThoiGian.Text = thoiGianConLai.ToString();
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, false));
-
                             }
                             else if (spl[5] == "stop")
                             {
-                                ttGoiKD[int.Parse(spl[4]) - 1] = 1;
+                                // When stopping, mark the current package as completed (status 2)
+                                if (int.Parse(spl[4]) > 0)
+                                {
+                                    ttGoiKD[int.Parse(spl[4]) - 1] = 2; // Changed from 1 to 2 to indicate completed
+                                }
                                 tmClient.Enabled = false;
                                 lblTongDiem.Visible = true;
                                 TongDiemKD();
@@ -565,13 +588,13 @@ namespace TS_Project
                             }
                             else if (spl[5] == "ready")
                             {
+                                // When ready, mark the package as selected (status 1)
                                 if (int.Parse(spl[4]) > 0)
                                 {
-                                    ttGoiKD[int.Parse(spl[4]) - 1] = 1;
+                                    ttGoiKD[int.Parse(spl[4]) - 1] = 1; // Keep as 1 to indicate selected/in-progress
                                 }
                                 else
                                 {
-
                                     this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group6\\ts_kd.png");
                                     this.BackgroundImageLayout = ImageLayout.Stretch;
                                 }
@@ -581,15 +604,12 @@ namespace TS_Project
                                 lblTongDiem.Visible = true;
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, false));
-
                             }
                             else if (spl[5] == "next")
                             {
-
                                 TongDiemKD();
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, id, int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, false));
-
                             }
                             else if (spl[5] == "capNhatDiemManHinh")
                             {
@@ -649,14 +669,22 @@ namespace TS_Project
                     }
                     else
                     {
+                        int[] ttGoiKD = { 0, 0, 0, 0, 0, 0 };
                         if (spl[2] == "playkhoidong")
                         {
-                           
+                            ngoisaoSchool.Visible = true;
+                            ngoisaoTS.Visible = true;
+                            TongDiemKD();
                             displayTeamInfo();
+                            lblTongDiem.Visible = true;
 
                             if (spl[5] == "stop")
                             {
-                                ttGoiKD[int.Parse(spl[4]) - 1] = 1;
+                                // When stopping, mark the current package as completed (status 2)
+                                if (int.Parse(spl[4]) > 0)
+                                {
+                                    ttGoiKD[int.Parse(spl[4]) - 1] = 2; // Changed from 1 to 2 to indicate completed
+                                }
                                 tmClient.Enabled = false;
                                 lblTongDiem.Visible = true;
                                 TongDiemKD();
@@ -665,16 +693,15 @@ namespace TS_Project
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, int.Parse(spl[0]), int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, true));
                             }
-
                             else if (spl[5] == "ready")
                             {
+                                // When ready, mark the package as selected (status 1)
                                 if (int.Parse(spl[4]) > 0)
                                 {
-                                    ttGoiKD[int.Parse(spl[4]) - 1] = 1;
+                                    ttGoiKD[int.Parse(spl[4]) - 1] = 1; // Keep as 1 to indicate selected/in-progress
                                 }
                                 else
                                 {
-
                                     this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group6\\ts_kd.png");
                                     this.BackgroundImageLayout = ImageLayout.Stretch;
                                 }
@@ -684,15 +711,13 @@ namespace TS_Project
                                 lblTongDiem.Visible = true;
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, int.Parse(spl[0]), int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, false));
-                            }
+                            }  
                             else if (spl[5] == "capNhatDiemManHinh")
                             {
                                 TongDiemKD();
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucKhoiDong(sock, int.Parse(spl[0]), int.Parse(spl[3]), int.Parse(spl[4]), ttGoiKD, true));
                             }
-
-
                         }
                         if (spl[2] == "playtoasang")
                         {
@@ -722,8 +747,8 @@ namespace TS_Project
                                 TongDiemKD();
                                 tmClient.Enabled = false;
                                 tt = false;
-                                x2 = true;
-                                da = true;
+                                x2 = false;
+                                da = false;
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucToaSang(sock, int.Parse(spl[0]), int.Parse(spl[4]), tt, x2, da, false, false));
                             }

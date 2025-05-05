@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -70,14 +71,14 @@ namespace TS_Project
                     {
                         txtCauTraLoi.BeginInvoke((Action)(() =>
                         {
-                            txtCauTraLoi.Select();
                             txtCauTraLoi.Focus();
+                            txtCauTraLoi.Select();
                         }));
                     }
                     else
                     {
-                        txtCauTraLoi.Select();
                         txtCauTraLoi.Focus();
+                        txtCauTraLoi.Select();
                     }
 
 
@@ -124,8 +125,10 @@ namespace TS_Project
             pbDapAn.Visible = true;
             pbGui.Visible = true;
         }
-        private Button _draggedButton; // Lưu button đang được kéo
-
+        //private Button _draggedButton; // Lưu button đang được kéo
+        private Button _draggedButton;
+        private PictureBox _dragPreview;
+        private Point _dragOffset;
         public void displayUCKhamPha(int cauHoiId)
         {
             EnabledGui();
@@ -210,28 +213,62 @@ namespace TS_Project
 
         private void Btn_MouseDown(object sender, MouseEventArgs e)
         {
-            Button btn = (Button)sender;
             if (e.Button == MouseButtons.Left)
             {
-                // Lưu button đang được kéo
-                _draggedButton = btn;
-                btn.DoDragDrop(btn, DragDropEffects.Move);
-                // Giữ focus cho textbox sau khi kéo thả
-                txtCauTraLoi.Focus();
+                _draggedButton = sender as Button;
+                // Highlight các button còn lại
+                foreach (Button btn in flowPanelSentences.Controls.OfType<Button>())
+                {
+                    if (btn != _draggedButton)
+                        btn.BackColor = Color.FromArgb(46, 204, 113); // Màu drag highlight (Xanh lá)
+                }
+                // Tạo ảnh "ghost"
+                Bitmap bmp = new Bitmap(_draggedButton.Width, _draggedButton.Height);
+                _draggedButton.DrawToBitmap(bmp, new Rectangle(Point.Empty, _draggedButton.Size));
+                bmp = CreateTransparentBitmap(bmp); // 👈 thêm dòng này
 
+                // Hiển thị ảnh dưới con trỏ
+                _dragPreview = new PictureBox
+                {
+                    Image = bmp,
+                    Size = _draggedButton.Size,
+                    Location = _draggedButton.PointToScreen(Point.Empty),
+                    BackColor = Color.Transparent
+                };
+                _dragOffset = new Point(e.X, e.Y);
+
+                //_dragPreview.TopMost = true;
+                _dragPreview.BringToFront();
+                _dragPreview.Parent = this.FindForm();
+                _dragPreview.Show();
+
+                _dragPreview.DoDragDrop(_draggedButton, DragDropEffects.Move);
             }
+        }
+        private Bitmap CreateTransparentBitmap(Bitmap original)
+        {
+            Bitmap transparentBmp = new Bitmap(original.Width, original.Height);
+            using (Graphics g = Graphics.FromImage(transparentBmp))
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = 0.7f; // Độ trong suốt (0.7 = 70%)
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height), 0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
+            }
+            return transparentBmp;
         }
 
         private void Btn_DragOver(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move;
-
-            Button targetButton = (Button)sender;
-            if (_draggedButton != null && targetButton != _draggedButton)
+            if (_dragPreview != null)
             {
-                targetButton.BackColor = Color.FromArgb(46, 204, 113); // Màu khi drag over
+                Point cursorPos = Cursor.Position;
+                _dragPreview.Location = new Point(cursorPos.X - _dragOffset.X, cursorPos.Y - _dragOffset.Y);
             }
+            e.Effect = DragDropEffects.Move;
         }
+
 
         private void Btn_DragLeave(object sender, EventArgs e)
         {
@@ -245,21 +282,29 @@ namespace TS_Project
 
             if (_draggedButton != null && targetButton != _draggedButton)
             {
-                // Đổi vị trí các button
                 int draggedIndex = flowPanelSentences.Controls.IndexOf(_draggedButton);
                 int targetIndex = flowPanelSentences.Controls.IndexOf(targetButton);
 
                 flowPanelSentences.Controls.SetChildIndex(_draggedButton, targetIndex);
 
-                // Reset màu nền
-                foreach (Button btn in flowPanelSentences.Controls.OfType<Button>())
-                {
-                    btn.BackColor = Color.FromArgb(52, 152, 219);
-                }
-
-                // Cập nhật thứ tự trong textbox
                 UpdateAnswerOrder();
             }
+
+            // Dọn ảnh kéo
+            if (_dragPreview != null)
+            {
+                _dragPreview.Dispose();
+                _dragPreview = null;
+            }
+            // 👉 Focus lại sau khi kéo thả
+            this.BeginInvoke((Action)(() =>
+            {
+                if (txtCauTraLoi.Enabled)
+                {
+                    txtCauTraLoi.Focus();
+                    txtCauTraLoi.Select();
+                }
+            }));
         }
 
         private void Btn_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
@@ -269,8 +314,14 @@ namespace TS_Project
             {
                 foreach (Button btn in flowPanelSentences.Controls.OfType<Button>())
                 {
-                    btn.BackColor = Color.FromArgb(52, 152, 219);
+                    btn.BackColor = Color.FromArgb(52, 152, 219); // Màu xanh ban đầu
                 }
+            }
+            // 👉 Focus lại txtCauTraLoi
+            if (txtCauTraLoi.CanFocus)
+            {
+                txtCauTraLoi.Focus();
+                txtCauTraLoi.Select();
             }
         }
 

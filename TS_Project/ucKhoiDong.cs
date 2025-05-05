@@ -39,40 +39,19 @@ namespace TS_Project
             _goicauhoiid = goicauhoiid;
             _ttgoi = ttgoi;
             _start = start;
+            Load += ucKhoiDong_Load;
         }
-
-        private void SendEvent(string str)
-        {
-            // Check we are connected
-            if (_socket == null || !_socket.Connected)
-            {
-                MessageBox.Show(this, "Must be connected to Send a message");
-                return;
-            }
-            // Read the message from the text box and send it
-            try
-            {
-                // Convert to byte array and send.
-                Byte[] byteDateLine = Encoding.ASCII.GetBytes(str.ToCharArray());
-                _socket.Send(byteDateLine, byteDateLine.Length, 0);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, ex.Message, "Send lenh dieu khien loi!");
-            }
-
-        }
-
 
         private void ucKhoiDong_Load(object sender, EventArgs e)
         {
             ds_doi tends = _entities.ds_doi.Find(_doiid);
+
             if (_goicauhoiid == 0)
             {
-
                 invisibleGui();
-                lblThele.Text = "Please invite candidate " + tends.tennguoichoi.ToUpper() + " choose question package!";
-                
+                lblThele.Text = "Please invite candidate " + tends.tennguoichoi.ToUpper() + " chooses question package!";
+                // Reset all packages to available state when starting new selection
+                ResetAllPackageStates();
             }
             else
             {
@@ -80,26 +59,29 @@ namespace TS_Project
                 lblGioiThieu.Visible = false;
                 lblThele.Visible = true;
                 lblThele.Text = "Candidate " + tends.tennguoichoi.ToUpper() + " selected package " + _goicauhoiid;
+
+                // Update all package states first
+                UpdateAllPackageStates(_ttgoi);
+
                 if (_cauhoiid > 0)
                 {
                     labelNoiDungCauHoi.Text = "Question number " + _entities.ds_goicauhoikhoidong.Find(_cauhoiid).vitri + ":";
                     lblNoiDungCauHoi.Text = _entities.ds_goicauhoikhoidong.Find(_cauhoiid).noidungcauhoi;
+                    // Add to displayed questions cache
+                    if (!dsCauHoiDaHienThi.Contains(_cauhoiid))
+                    {
+                        dsCauHoiDaHienThi.Add(_cauhoiid);
+                    }
                 }
                 else
                 {
-
                     visibleGui1();
-                    if (_start == true)
+                    if (_start)
                     {
                         ds_doi teamnext = _entities.ds_doi.Where(x => x.vitridoi == tends.vitridoi + 1).FirstOrDefault();
-                        if(teamnext != null)
-                        {
-                            lblGioiThieu.Text = "Congratulations to candidate " + tends.tennguoichoi.ToString().ToUpper() + " completed the Warm-up section\nCandidate " + teamnext.tennguoichoi.ToString().ToUpper() + " preparing for the section";
-                        }
-                        else
-                        {
-                            lblGioiThieu.Text = "Congratulations to candidate " + tends.tennguoichoi.ToString().ToUpper() + " has completed the Warm-up section";
-                        }
+                        lblGioiThieu.Text = teamnext != null
+                            ? $"Congratulations to candidate {tends.tennguoichoi.ToString().ToUpper()} completed the Warm-up section\nCandidate {teamnext.tennguoichoi.ToString().ToUpper()} preparing for the section"
+                            : $"Congratulations to candidate {tends.tennguoichoi.ToString().ToUpper()} has completed the Warm-up section";
                         lblGioiThieu.Visible = true;
                     }
                     else
@@ -107,8 +89,96 @@ namespace TS_Project
                         lblGioiThieu.Visible = false;
                     }
                 }
-                disableButton(_ttgoi);
-                selectedButton(_ttgoi);
+
+            }
+        }
+        // Danh sách các ID câu hỏi đã hiển thị trước đó
+        private HashSet<int> dsCauHoiDaHienThi = new HashSet<int>();
+        private void ResetAllPackageStates()
+        {
+            // Reset all packages to available state (0)
+            for (int i = 0; i < 6; i++)
+            {
+                SetPackageImage(i + 1, "ac");
+            }
+            dsCauHoiDaHienThi.Clear();
+
+        }
+
+        private void UpdateAllPackageStates(int[] states)
+        {
+            for (int i = 0; i < states.Length; i++)
+            {
+                int packageNumber = i + 1;
+                switch (states[i])
+                {
+                    case 0: // Available
+                        SetPackageImage(packageNumber, "ac"); // Available (normal)
+                        break;
+                    case 1: // Selected/In-progress
+                        SetPackageImage(packageNumber, "in"); // Highlighted/selected
+                        break;
+                    case 2: // Completed
+                        SetPackageImage(packageNumber, "dis"); // Disabled/grayed out
+                        break;
+                }
+            }
+        }
+        private void SetPackageImage(int packageNumber, string state)
+        {
+            string imagePath = $"{currentPath}\\Resources\\group4\\";
+
+            switch (state)
+            {
+                case "ac": // Available
+                    imagePath += $"{packageNumber}-ac.png";
+                    break;
+                case "in": // Disabled
+                    imagePath += $"{packageNumber}-in.png";
+                    break;
+                case "dis": // Selected
+                    imagePath += $"{packageNumber}-dis.png"; // Or use a different selected image if available
+                    break;
+            }
+
+            var pictureBox = GetPictureBoxByPackageNumber(packageNumber);
+            if (pictureBox != null && File.Exists(imagePath))
+            {
+                pictureBox.BackgroundImage = Image.FromFile(imagePath);
+                pictureBox.BackgroundImageLayout = ImageLayout.Stretch;
+            }
+        }
+
+        private PictureBox GetPictureBoxByPackageNumber(int packageNumber)
+        {
+            switch (packageNumber)
+            {
+                case 1: return pbGoi1;
+                case 2: return pbGoi2;
+                case 3: return pbGoi3;
+                case 4: return pbGoi4;
+                case 5: return pbGoi5;
+                case 6: return pbGoi6;
+                default: return null;
+            }
+        }
+
+        private void SendEvent(string str)
+        {
+            if (_socket == null || !_socket.Connected)
+            {
+                MessageBox.Show(this, "Must be connected to Send a message");
+                return;
+            }
+
+            try
+            {
+                Byte[] byteDateLine = Encoding.ASCII.GetBytes(str.ToCharArray());
+                _socket.Send(byteDateLine, byteDateLine.Length, 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Send lenh dieu khien loi!");
             }
         }
         private void invisibleGui()
@@ -116,7 +186,7 @@ namespace TS_Project
             lblThele.Visible = true;
             lblNoiDungCauHoi.Visible = false;
             labelNoiDungCauHoi.Visible = false;
-           
+
 
         }
         private void visibleGui1()
@@ -124,93 +194,13 @@ namespace TS_Project
 
             lblNoiDungCauHoi.Visible = false;
             labelNoiDungCauHoi.Visible = false;
-           
+
         }
         private void visibleGui()
         {
             lblNoiDungCauHoi.Visible = true;
             labelNoiDungCauHoi.Visible = true;
-          
+
         }
-        private void selectedButton(int[] _ttgoi)
-        {
-            if (_ttgoi[0] == 2)
-            {
-                pbGoi1.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_221.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[1] == 2)
-            {
-                pbGoi2.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_222.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[2] == 2)
-            {
-                pbGoi3.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_223.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[3] == 2)
-            {
-                pbGoi4.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_224.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[4] == 2)
-            {
-                pbGoi5.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_225.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[5] == 2)
-            {
-                pbGoi6.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\Group_226.png");
-                this.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-        }
-
-        private void disableButton(int[] _ttgoi)
-        {
-            if (_ttgoi[0] == 1)
-            {
-                pbGoi1.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd1_in.png");
-                pbGoi1.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[1] == 1)
-            {
-                pbGoi2.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd2_in.png");
-                pbGoi2.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[2] == 1)
-            {
-                pbGoi3.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd3_in.png");
-                pbGoi3.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[3] == 1)
-            {
-                pbGoi4.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd4_in.png");
-                pbGoi4.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[4] == 1)
-            {
-                pbGoi5.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd5_in.png");
-                pbGoi5.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-            if (_ttgoi[5] == 1)
-            {
-                pbGoi6.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group4\\kd6_in.png");
-                pbGoi6.BackgroundImageLayout = ImageLayout.Stretch;
-
-            }
-        }
-
     }
 }

@@ -38,8 +38,12 @@
             this.lblTongDiem = new System.Windows.Forms.Label();
             this.btnCloseTS = new System.Windows.Forms.PictureBox();
             this.btnMiniTS = new System.Windows.Forms.PictureBox();
+            this.ngoisaoTS = new System.Windows.Forms.PictureBox();
+            this.ngoisaoSchool = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.btnCloseTS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMiniTS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ngoisaoTS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ngoisaoSchool)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTenThiSinh
@@ -47,7 +51,7 @@
             this.lblTenThiSinh.BackColor = System.Drawing.Color.Transparent;
             this.lblTenThiSinh.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTenThiSinh.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblTenThiSinh.Location = new System.Drawing.Point(523, 147);
+            this.lblTenThiSinh.Location = new System.Drawing.Point(430, 147);
             this.lblTenThiSinh.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTenThiSinh.Name = "lblTenThiSinh";
             this.lblTenThiSinh.Size = new System.Drawing.Size(388, 54);
@@ -60,12 +64,12 @@
             this.lblTenTruong.BackColor = System.Drawing.Color.Transparent;
             this.lblTenTruong.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTenTruong.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblTenTruong.Location = new System.Drawing.Point(977, 147);
+            this.lblTenTruong.Location = new System.Drawing.Point(884, 147);
             this.lblTenTruong.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTenTruong.Name = "lblTenTruong";
-            this.lblTenTruong.Size = new System.Drawing.Size(391, 58);
+            this.lblTenTruong.Size = new System.Drawing.Size(460, 58);
             this.lblTenTruong.TabIndex = 0;
-            this.lblTenTruong.Text = "TRƯỜNG THCS THỊ TRẤN QUÁN HÀU";
+            this.lblTenTruong.Text = "QUAN HAU TOWN SECONDARY SCHOOL";
             this.lblTenTruong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblThoiGian
@@ -73,7 +77,7 @@
             this.lblThoiGian.BackColor = System.Drawing.Color.Transparent;
             this.lblThoiGian.Font = new System.Drawing.Font("Showcard Gothic", 50.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThoiGian.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblThoiGian.Location = new System.Drawing.Point(103, 292);
+            this.lblThoiGian.Location = new System.Drawing.Point(92, 292);
             this.lblThoiGian.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblThoiGian.Name = "lblThoiGian";
             this.lblThoiGian.Size = new System.Drawing.Size(172, 78);
@@ -86,7 +90,7 @@
             // 
             this.pnlNoiDung.BackColor = System.Drawing.Color.Transparent;
             this.pnlNoiDung.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlNoiDung.Location = new System.Drawing.Point(364, 222);
+            this.pnlNoiDung.Location = new System.Drawing.Point(362, 222);
             this.pnlNoiDung.Margin = new System.Windows.Forms.Padding(4);
             this.pnlNoiDung.Name = "pnlNoiDung";
             this.pnlNoiDung.Size = new System.Drawing.Size(1004, 530);
@@ -138,12 +142,38 @@
             this.btnMiniTS.TabStop = false;
             this.btnMiniTS.Click += new System.EventHandler(this.btnMiniTS_Click);
             // 
+            // ngoisaoTS
+            // 
+            this.ngoisaoTS.BackColor = System.Drawing.Color.Transparent;
+            this.ngoisaoTS.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ngoisaoTS.BackgroundImage")));
+            this.ngoisaoTS.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ngoisaoTS.Location = new System.Drawing.Point(397, 158);
+            this.ngoisaoTS.Name = "ngoisaoTS";
+            this.ngoisaoTS.Size = new System.Drawing.Size(30, 26);
+            this.ngoisaoTS.TabIndex = 84;
+            this.ngoisaoTS.TabStop = false;
+            this.ngoisaoTS.Visible = false;
+            // 
+            // ngoisaoSchool
+            // 
+            this.ngoisaoSchool.BackColor = System.Drawing.Color.Transparent;
+            this.ngoisaoSchool.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ngoisaoSchool.BackgroundImage")));
+            this.ngoisaoSchool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ngoisaoSchool.Location = new System.Drawing.Point(852, 159);
+            this.ngoisaoSchool.Name = "ngoisaoSchool";
+            this.ngoisaoSchool.Size = new System.Drawing.Size(30, 26);
+            this.ngoisaoSchool.TabIndex = 85;
+            this.ngoisaoSchool.TabStop = false;
+            this.ngoisaoSchool.Visible = false;
+            // 
             // frmThiSinh
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1386, 788);
+            this.Controls.Add(this.ngoisaoSchool);
+            this.Controls.Add(this.ngoisaoTS);
             this.Controls.Add(this.btnMiniTS);
             this.Controls.Add(this.btnCloseTS);
             this.Controls.Add(this.lblTongDiem);
@@ -162,6 +192,8 @@
             this.Load += new System.EventHandler(this.frmThiSinh_Load);
             ((System.ComponentModel.ISupportInitialize)(this.btnCloseTS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnMiniTS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ngoisaoTS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ngoisaoSchool)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -175,5 +207,7 @@
         private System.Windows.Forms.Label lblTongDiem;
         private System.Windows.Forms.PictureBox btnCloseTS;
         private System.Windows.Forms.PictureBox btnMiniTS;
+        private System.Windows.Forms.PictureBox ngoisaoTS;
+        private System.Windows.Forms.PictureBox ngoisaoSchool;
     }
 }

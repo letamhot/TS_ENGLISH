@@ -52,7 +52,7 @@
             // 
             // lblNoiDungCauHoiVD
             // 
-            this.lblNoiDungCauHoiVD.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoiDungCauHoiVD.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNoiDungCauHoiVD.Location = new System.Drawing.Point(10, 44);
             this.lblNoiDungCauHoiVD.Name = "lblNoiDungCauHoiVD";
             this.lblNoiDungCauHoiVD.Size = new System.Drawing.Size(695, 322);
@@ -134,18 +134,18 @@
             this.pbDapanCH.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbDapanCH.BackgroundImage")));
             this.pbDapanCH.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbDapanCH.Controls.Add(this.lblDA1);
-            this.pbDapanCH.Location = new System.Drawing.Point(3, 381);
+            this.pbDapanCH.Location = new System.Drawing.Point(3, 369);
             this.pbDapanCH.Name = "pbDapanCH";
-            this.pbDapanCH.Size = new System.Drawing.Size(984, 130);
+            this.pbDapanCH.Size = new System.Drawing.Size(984, 142);
             this.pbDapanCH.TabIndex = 60;
             // 
             // lblDA1
             // 
             this.lblDA1.Font = new System.Drawing.Font("Arial", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDA1.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.lblDA1.Location = new System.Drawing.Point(305, 1);
+            this.lblDA1.Location = new System.Drawing.Point(387, 1);
             this.lblDA1.Name = "lblDA1";
-            this.lblDA1.Size = new System.Drawing.Size(645, 130);
+            this.lblDA1.Size = new System.Drawing.Size(594, 141);
             this.lblDA1.TabIndex = 56;
             this.lblDA1.Text = "Listen to the following piece of music. What is the title of the song and its com" +
     "poser?  Listen to the following piece of music. What is the title of the song an" +

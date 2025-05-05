@@ -139,7 +139,7 @@
             // 
             // lblGioiThieu
             // 
-            this.lblGioiThieu.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGioiThieu.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGioiThieu.Location = new System.Drawing.Point(22, 65);
             this.lblGioiThieu.Name = "lblGioiThieu";
             this.lblGioiThieu.Size = new System.Drawing.Size(604, 416);
