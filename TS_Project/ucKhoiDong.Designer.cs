@@ -50,7 +50,7 @@
             // 
             // lblNoiDungCauHoi
             // 
-            this.lblNoiDungCauHoi.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoiDungCauHoi.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNoiDungCauHoi.Location = new System.Drawing.Point(22, 104);
             this.lblNoiDungCauHoi.Name = "lblNoiDungCauHoi";
             this.lblNoiDungCauHoi.Size = new System.Drawing.Size(497, 393);
@@ -120,20 +120,20 @@
             // labelNoiDungCauHoi
             // 
             this.labelNoiDungCauHoi.AutoSize = true;
-            this.labelNoiDungCauHoi.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNoiDungCauHoi.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelNoiDungCauHoi.Location = new System.Drawing.Point(22, 65);
             this.labelNoiDungCauHoi.Name = "labelNoiDungCauHoi";
-            this.labelNoiDungCauHoi.Size = new System.Drawing.Size(193, 26);
+            this.labelNoiDungCauHoi.Size = new System.Drawing.Size(183, 29);
             this.labelNoiDungCauHoi.TabIndex = 21;
             this.labelNoiDungCauHoi.Text = "Nội dung câu hỏi:";
             // 
             // lblThele
             // 
             this.lblThele.AutoSize = true;
-            this.lblThele.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThele.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThele.Location = new System.Drawing.Point(21, 24);
             this.lblThele.Name = "lblThele";
-            this.lblThele.Size = new System.Drawing.Size(200, 31);
+            this.lblThele.Size = new System.Drawing.Size(190, 31);
             this.lblThele.TabIndex = 29;
             this.lblThele.Text = "Thể lệ phần thi:";
             // 

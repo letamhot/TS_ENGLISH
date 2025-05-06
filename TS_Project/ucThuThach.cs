@@ -378,7 +378,8 @@ namespace TS_Project
 
                 pbGui.Enabled = false;
                 pbGui.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\send_in.png");
-
+                // Thêm dòng này để tự động ẩn nội dung khi hết giờ
+                OnTimeUp();
             }
 
         }
@@ -477,6 +478,8 @@ namespace TS_Project
             {
                 btn.AllowDrop = false; // Tắt kéo/thả
                 btn.Enabled = false;   // Vô hiệu hóa nút
+                btn.BackColor = Color.LightGray; // Đổi màu để thể hiện trạng thái không hoạt động
+                btn.Cursor = Cursors.Default; // Đổi con trỏ về mặc định
             }
         }
         // Khi hết thời gian, tự động ẩn nội dung

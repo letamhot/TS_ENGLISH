@@ -58,7 +58,7 @@ namespace TS_Project
                 visibleGui();
                 lblGioiThieu.Visible = false;
                 lblThele.Visible = true;
-                lblThele.Text = "Candidate " + tends.tennguoichoi.ToUpper() + " selected package " + _goicauhoiid;
+                lblThele.Text = "Candidate " + tends.tennguoichoi.ToUpper() + " chooses question package number " + _goicauhoiid;
 
                 // Update all package states first
                 UpdateAllPackageStates(_ttgoi);

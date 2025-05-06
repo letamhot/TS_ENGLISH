@@ -80,16 +80,16 @@ namespace TS_Project
                         lblNoiDungCauHoiVD.Visible = true;
                         if (vd.noidungcauhoi.Length > 200)
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 18,FontStyle.Bold);
                         }
                         else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 26);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
 
                         }
                         else
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 22);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
 
                         }
                         lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
@@ -229,16 +229,16 @@ namespace TS_Project
                         lblNoiDungCauHoiVD.Visible = true;
                         if (vd.noidungcauhoi.Length > 200)
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 18);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 18, FontStyle.Bold);
                         }
                         else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 26);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
 
                         }
                         else
                         {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20);
+                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
 
                         }
                         lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
