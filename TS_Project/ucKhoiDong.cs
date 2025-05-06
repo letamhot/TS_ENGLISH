@@ -49,7 +49,7 @@ namespace TS_Project
             if (_goicauhoiid == 0)
             {
                 invisibleGui();
-                lblThele.Text = "Question package!";
+                lblThele.Text = "Question packages!";
                 // Reset all packages to available state when starting new selection
                 ResetAllPackageStates();
             }
@@ -65,7 +65,7 @@ namespace TS_Project
 
                 if (_cauhoiid > 0)
                 {
-                    labelNoiDungCauHoi.Text = "Question number " + _entities.ds_goicauhoikhoidong.Find(_cauhoiid).vitri + ":";
+                    labelNoiDungCauHoi.Text = "Question " + _entities.ds_goicauhoikhoidong.Find(_cauhoiid).vitri + ":";
                     lblNoiDungCauHoi.Text = _entities.ds_goicauhoikhoidong.Find(_cauhoiid).noidungcauhoi;
                     // Add to displayed questions cache
                     if (!dsCauHoiDaHienThi.Contains(_cauhoiid))

@@ -108,6 +108,7 @@ namespace TS_Project
                         {
                             if (File.Exists(videoPath))
                             {
+                                axWindowsMediaPlayer1.uiMode = "none";
                                 axWindowsMediaPlayer1.URL = videoPath;
                                 axWindowsMediaPlayer1.Visible = true;
                                 axWindowsMediaPlayer1.Ctlcontrols.play();

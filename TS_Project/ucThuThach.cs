@@ -151,8 +151,10 @@ namespace TS_Project
                     lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful paragraph";
 
                 }
-                //lblThele.Text = "Question number " + khamPha.vitri + ":";
+                // Tối ưu hiển thị, tránh nháy bằng cách bật DoubleBuffered
+                EnableDoubleBuffering(flowPanelSentences);
                 // Cấu hình FlowLayoutPanel
+                //flowPanelSentences.SuspendLayout();
                 flowPanelSentences.Controls.Clear();
                 flowPanelSentences.FlowDirection = FlowDirection.TopDown;
                 flowPanelSentences.WrapContents = false;
@@ -225,6 +227,14 @@ namespace TS_Project
                     flowPanelSentences.Controls.Add(btn);
                 }
             }
+        }
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void Btn_MouseDown(object sender, MouseEventArgs e)
