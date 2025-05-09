@@ -65,8 +65,13 @@ namespace TS_Project
 
                 if (_cauhoiid > 0)
                 {
-                    labelNoiDungCauHoi.Text = "Question " + _entities.ds_goicauhoikhoidong.Find(_cauhoiid).vitri + ":";
-                    lblNoiDungCauHoi.Text = _entities.ds_goicauhoikhoidong.Find(_cauhoiid).noidungcauhoi;
+                    ds_goicauhoikhoidong cauhoi = _entities.ds_goicauhoikhoidong.Find(_cauhoiid);
+
+                    _entities.Entry(cauhoi).Reload(); // ⚠️ Nạp lại từ DB
+
+                    lblNoiDungCauHoi.Text = cauhoi.noidungcauhoi;
+                    labelNoiDungCauHoi.Text = "Question " + cauhoi.vitri + ":";
+                    
                     // Add to displayed questions cache
                     if (!dsCauHoiDaHienThi.Contains(_cauhoiid))
                     {

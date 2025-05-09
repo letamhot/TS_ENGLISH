@@ -68,6 +68,8 @@ namespace TS_Project
                     UpdateAllQuestionStates();
 
                     ds_goicauhoishining vd = _entities.ds_goicauhoishining.Find(_cauhoiid);
+                    _entities.Entry(vd).Reload(); // ⚠️ Nạp lại từ DB
+
                     disPlayVeDich(_cauhoiid, (int)vd.vitri, _x2);
                     loadNutDangChon(_cauhoiid, _x2);
                     loadNutDaChon(_cauhoiid);
@@ -429,7 +431,7 @@ namespace TS_Project
                         SetQuestionImage((int)question.vitri, _x2 ? "star" : "in");
                         break;
                     case 2: // Already answered - disabled
-                        SetQuestionImage((int)question.vitri, "dis");
+                        SetQuestionImage((int)question.vitri, _x2 ? "star" : "dis");
                         break;
                 }
             }
@@ -479,6 +481,7 @@ namespace TS_Project
         void disPlayVeDich(int cauhoiid, int vitri, bool isX2)
         {
             var cauhoiTS = _entities.ds_goicauhoishining.Find(cauhoiid);
+
             if (cauhoiTS != null && cauhoiTS.vitri == vitri)
             {
                 // Always update the display based on current state
@@ -523,7 +526,7 @@ namespace TS_Project
 
             foreach (var cauHoi in dsCauDaChon)
             {
-                SetQuestionImage((int)cauHoi.vitri, "dis");
+                SetQuestionImage((int)cauHoi.vitri, _x2 ? "star" : "dis");
             }
         }
 

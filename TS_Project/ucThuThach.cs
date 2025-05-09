@@ -133,6 +133,8 @@ namespace TS_Project
         {
             EnabledGui();
             ds_cauhoithuthach khamPha = _entities.ds_cauhoithuthach.Find(cauHoiId);
+            _entities.Entry(khamPha).Reload(); // ⚠️ Nạp lại từ DB
+
             if (khamPha != null)
             {
                 //Hiển thị loại câu hỏi theo vị trí
