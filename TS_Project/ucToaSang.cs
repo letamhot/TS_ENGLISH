@@ -64,8 +64,7 @@ namespace TS_Project
 
                 if (_cauhoiid > 0)
                 {
-                    // First update all question states based on database
-                    UpdateAllQuestionStates();
+
 
                     ds_goicauhoishining vd = _entities.ds_goicauhoishining.Find(_cauhoiid);
                     _entities.Entry(vd).Reload(); // ⚠️ Nạp lại từ DB
@@ -73,7 +72,8 @@ namespace TS_Project
                     disPlayVeDich(_cauhoiid, (int)vd.vitri, _x2);
                     loadNutDangChon(_cauhoiid, _x2);
                     loadNutDaChon(_cauhoiid);
-
+                    // First update all question states based on database
+                    UpdateAllQuestionStates(_cauhoiid);
                     lblThele.Text = "Question " + vd.vitri + ": (" + vd.sodiem + " points)";
 
                     // Rest of your question display logic remains the same...
@@ -415,13 +415,15 @@ namespace TS_Project
             dsCauHoiDaHienThi.Clear();
         }
 
-        private void UpdateAllQuestionStates()
+        private void UpdateAllQuestionStates(int cauhoiid)
         {
             // Get all questions from database
-            var allQuestions = _entities.ds_goicauhoishining.ToList();
+            var allQuestions = _entities.ds_goicauhoishining.Where(x =>x.cauhoiid == cauhoiid).ToList();
 
             foreach (var question in allQuestions)
             {
+                _entities.Entry(question).Reload(); // Nạp lại từng dòng mới nhất từ DB
+
                 switch (question.trangThai)
                 {
                     case 0: // Not selected - available
@@ -481,6 +483,7 @@ namespace TS_Project
         void disPlayVeDich(int cauhoiid, int vitri, bool isX2)
         {
             var cauhoiTS = _entities.ds_goicauhoishining.Find(cauhoiid);
+            _entities.Entry(cauhoiTS).Reload(); // Nạp lại từng dòng mới nhất từ DB
 
             if (cauhoiTS != null && cauhoiTS.vitri == vitri)
             {
@@ -514,6 +517,8 @@ namespace TS_Project
 
             foreach (var cauHoi in dsCauChon)
             {
+                _entities.Entry(cauHoi).Reload(); // Nạp lại từng dòng mới nhất từ DB
+
                 SetQuestionImage((int)cauHoi.vitri, isX2 ? "star" : "in");
             }
         }
@@ -526,6 +531,8 @@ namespace TS_Project
 
             foreach (var cauHoi in dsCauDaChon)
             {
+                _entities.Entry(cauHoi).Reload(); // Nạp lại từng dòng mới nhất từ DB
+
                 SetQuestionImage((int)cauHoi.vitri, _x2 ? "star" : "dis");
             }
         }
