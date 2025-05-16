@@ -66,19 +66,34 @@ namespace TS_Project
                     txtCauTraLoi.Enabled = true;
                     pbGui.Enabled = true;
                     displayUCKhamPha(_cauhoiid);
-                    this.ActiveControl = txtCauTraLoi;
                     if (txtCauTraLoi.InvokeRequired)
                     {
-                        txtCauTraLoi.BeginInvoke((Action)(() =>
+                        this.BeginInvoke((Action)(() =>
                         {
-                            txtCauTraLoi.Focus();
-                            txtCauTraLoi.Select();
+                            System.Windows.Forms.Timer focusTimer = new System.Windows.Forms.Timer();
+                            focusTimer.Interval = 100; // 100 ms
+                            focusTimer.Tick += (s, e) =>
+                            {
+                                focusTimer.Stop();
+                                txtCauTraLoi.Focus();
+                                txtCauTraLoi.Select();
+                            };
+                            focusTimer.Start();
+
                         }));
+
                     }
                     else
                     {
-                        txtCauTraLoi.Focus();
-                        txtCauTraLoi.Select();
+                        System.Windows.Forms.Timer focusTimer = new System.Windows.Forms.Timer();
+                        focusTimer.Interval = 100; // 100 ms
+                        focusTimer.Tick += (s, e) =>
+                        {
+                            focusTimer.Stop();
+                            txtCauTraLoi.Focus();
+                            txtCauTraLoi.Select();
+                        };
+                        focusTimer.Start();
                     }
 
 
@@ -194,7 +209,7 @@ namespace TS_Project
                         TextAlign = ContentAlignment.MiddleLeft,
                         Padding = new Padding(10, 5, 5, 5),
                         Cursor = _isStart ? Cursors.Hand : Cursors.Default,
-                        Tag = answerLabels[i],
+                        Tag = answerLabels[i].ToUpper(), // Store as uppercase
                         Enabled = _isStart,
                         AllowDrop = true // Bắt buộc phải có dòng này
                     };
@@ -356,7 +371,7 @@ namespace TS_Project
         private void UpdateAnswerOrder()
         {
             txtCauTraLoi.Text = string.Join("", flowPanelSentences.Controls.OfType<Button>()
-                .Select(btn => btn.Tag.ToString()));
+                .Select(btn => btn.Tag.ToString().ToUpper()));
         }
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -409,7 +424,7 @@ namespace TS_Project
         }
         private void txtCauTraLoi_TextChanged(object sender, EventArgs e)
         {
-            string inputOrder = txtCauTraLoi.Text.Trim();
+            string inputOrder = txtCauTraLoi.Text.Trim().ToUpper();
             List<Button> buttons = flowPanelSentences.Controls.OfType<Button>().ToList();
 
             if (inputOrder.Length == buttons.Count)
@@ -455,7 +470,7 @@ namespace TS_Project
                 ds_diem diem = new ds_diem();
                 diem.cuocthiid = _cuocthiid;
                 diem.doiid = _doiid;
-                diem.cautraloi = txtCauTraLoi.Text;
+                diem.cautraloi = txtCauTraLoi.Text.ToUpper();
                 diem.cauhoiid = _cauhoiid;
                 diem.phanthiid = 3;
                 diem.thoigiantraloi = thoiGianTraLoi;

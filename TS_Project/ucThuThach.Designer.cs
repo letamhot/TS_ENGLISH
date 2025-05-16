@@ -99,7 +99,7 @@
             this.lblThoiGianTraLoi.AutoSize = true;
             this.lblThoiGianTraLoi.BackColor = System.Drawing.SystemColors.Control;
             this.lblThoiGianTraLoi.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThoiGianTraLoi.Location = new System.Drawing.Point(426, 488);
+            this.lblThoiGianTraLoi.Location = new System.Drawing.Point(426, 485);
             this.lblThoiGianTraLoi.Name = "lblThoiGianTraLoi";
             this.lblThoiGianTraLoi.Size = new System.Drawing.Size(0, 21);
             this.lblThoiGianTraLoi.TabIndex = 9;
