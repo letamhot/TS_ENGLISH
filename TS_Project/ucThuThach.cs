@@ -152,20 +152,21 @@ namespace TS_Project
 
             if (khamPha != null)
             {
+                
                 //Hiển thị loại câu hỏi theo vị trí
                 if (khamPha.vitri == 1 || khamPha.vitri == 2)
                 {
-                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following words or phrases to make a complete sentence";
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following words or phrases to make a complete sentence.";
 
                 }
                 else if (khamPha.vitri == 3 || khamPha.vitri == 4)
                 {
-                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful conversation";
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following utterances to make a meaningful conversation.";
 
                 }
                 else
                 {
-                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful paragraph";
+                    lblThele.Text = "Question " + khamPha.vitri + ": Rearrange the following sentences to make a meaningful paragraph.";
 
                 }
                 // Tối ưu hiển thị, tránh nháy bằng cách bật DoubleBuffered
