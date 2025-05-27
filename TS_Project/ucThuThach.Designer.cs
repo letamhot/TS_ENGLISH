@@ -51,7 +51,7 @@
             // 
             this.pbGui.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGui.BackgroundImage")));
             this.pbGui.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbGui.Location = new System.Drawing.Point(755, 411);
+            this.pbGui.Location = new System.Drawing.Point(755, 422);
             this.pbGui.Name = "pbGui";
             this.pbGui.Size = new System.Drawing.Size(123, 112);
             this.pbGui.TabIndex = 5;
@@ -63,7 +63,7 @@
             this.pbDapAn.BackColor = System.Drawing.Color.Transparent;
             this.pbDapAn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbDapAn.BackgroundImage")));
             this.pbDapAn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbDapAn.Location = new System.Drawing.Point(105, 403);
+            this.pbDapAn.Location = new System.Drawing.Point(105, 414);
             this.pbDapAn.Name = "pbDapAn";
             this.pbDapAn.Size = new System.Drawing.Size(644, 154);
             this.pbDapAn.TabIndex = 6;
@@ -74,7 +74,7 @@
             this.txtCauTraLoi.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.txtCauTraLoi.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCauTraLoi.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCauTraLoi.Location = new System.Drawing.Point(263, 413);
+            this.txtCauTraLoi.Location = new System.Drawing.Point(263, 424);
             this.txtCauTraLoi.Multiline = true;
             this.txtCauTraLoi.Name = "txtCauTraLoi";
             this.txtCauTraLoi.Size = new System.Drawing.Size(466, 65);
@@ -88,7 +88,7 @@
             this.lblTGTL.BackColor = System.Drawing.SystemColors.Control;
             this.lblTGTL.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTGTL.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblTGTL.Location = new System.Drawing.Point(306, 485);
+            this.lblTGTL.Location = new System.Drawing.Point(306, 496);
             this.lblTGTL.Name = "lblTGTL";
             this.lblTGTL.Size = new System.Drawing.Size(121, 19);
             this.lblTGTL.TabIndex = 8;
@@ -99,7 +99,7 @@
             this.lblThoiGianTraLoi.AutoSize = true;
             this.lblThoiGianTraLoi.BackColor = System.Drawing.SystemColors.Control;
             this.lblThoiGianTraLoi.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThoiGianTraLoi.Location = new System.Drawing.Point(426, 485);
+            this.lblThoiGianTraLoi.Location = new System.Drawing.Point(426, 496);
             this.lblThoiGianTraLoi.Name = "lblThoiGianTraLoi";
             this.lblThoiGianTraLoi.Size = new System.Drawing.Size(0, 21);
             this.lblThoiGianTraLoi.TabIndex = 9;
@@ -109,17 +109,17 @@
             this.lblThele.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThele.Location = new System.Drawing.Point(22, 0);
             this.lblThele.Name = "lblThele";
-            this.lblThele.Size = new System.Drawing.Size(982, 53);
+            this.lblThele.Size = new System.Drawing.Size(982, 42);
             this.lblThele.TabIndex = 72;
             this.lblThele.Text = "Thể lệ phần thi:";
             // 
             // flowPanelSentences
             // 
             this.flowPanelSentences.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.flowPanelSentences.Location = new System.Drawing.Point(22, 55);
+            this.flowPanelSentences.Location = new System.Drawing.Point(22, 44);
             this.flowPanelSentences.Margin = new System.Windows.Forms.Padding(2);
             this.flowPanelSentences.Name = "flowPanelSentences";
-            this.flowPanelSentences.Size = new System.Drawing.Size(980, 356);
+            this.flowPanelSentences.Size = new System.Drawing.Size(980, 367);
             this.flowPanelSentences.TabIndex = 73;
             // 
             // ucThuThach
@@ -136,7 +136,7 @@
             this.Controls.Add(this.pbDapAn);
             this.Controls.Add(this.pbGui);
             this.Name = "ucThuThach";
-            this.Size = new System.Drawing.Size(1004, 530);
+            this.Size = new System.Drawing.Size(1004, 547);
             this.Load += new System.EventHandler(this.ucKhamPha_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbGui)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDapAn)).EndInit();

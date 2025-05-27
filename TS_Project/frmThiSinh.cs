@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using TS_Project.Model;
 
@@ -473,6 +474,14 @@ namespace TS_Project
                                 pnlNoiDung.Controls.Clear();
                                 pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, false, false, false, false));
                             }
+                            else if (spl[5] == "loadDanhSachCauHoi")
+                            {
+                                this.BackgroundImage = Image.FromFile(currentPath + "\\Resources\\group6\\ts_vd.png");
+                                this.BackgroundImageLayout = ImageLayout.Stretch;
+                                tmClient.Enabled = false;
+                                pnlNoiDung.Controls.Clear();
+                                pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, false, false, false, false, true));
+                            }
 
                             else if (spl[5] == "ready")
                             {
@@ -519,6 +528,25 @@ namespace TS_Project
                                     pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, false, false, false, false));
                                 }
 
+                            }
+                            else if (spl[5] == "start_x2")
+                            {
+                                tmClient.Enabled = true;
+                                tt = false;
+                                if (int.Parse(spl[4]) != 0)
+                                {
+                                    var cauhoiVD = _entities.ds_goicauhoishining.Find(int.Parse(spl[4]));
+
+                                    thoiGianConLai = 20;
+                                    lblThoiGian.Text = thoiGianConLai.ToString();
+                                    pnlNoiDung.Controls.Clear();
+                                    pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, true, false, false, false));
+                                }
+                                else
+                                {
+                                    pnlNoiDung.Controls.Clear();
+                                    pnlNoiDung.Controls.Add(new ucToaSang(sock, id, int.Parse(spl[4]), tt, true, false, false, false));
+                                }
                             }
                             else if (spl[5] == "forceanswer")
                             {

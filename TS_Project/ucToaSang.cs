@@ -25,6 +25,7 @@ namespace TS_Project
         private bool _isReady;
         private bool _x2 = false;
         private bool _da = false;
+        private bool _loadDS = false;
         private bool _trangThaiCau = false;
         private string currentPath = Directory.GetCurrentDirectory();
         QuaMienDiSanEntities _entities = new QuaMienDiSanEntities();
@@ -33,7 +34,7 @@ namespace TS_Project
             InitializeComponent();
         }
 
-        public ucToaSang(Socket sock, int doiid, int cauhoiid, bool isStart, bool x2, bool da, bool trangthai, bool isReady)
+        public ucToaSang(Socket sock, int doiid, int cauhoiid, bool isStart, bool x2, bool da, bool trangthai, bool isReady, bool loadDS = false)
         {
             InitializeComponent();
             _socket = sock;
@@ -42,6 +43,7 @@ namespace TS_Project
             _tt = trangthai;
             _isVideoStart = isStart;
             _isReady = isReady;
+            _loadDS = loadDS;
             _x2 = x2;
             _da = da;
             loadUC();
@@ -58,82 +60,202 @@ namespace TS_Project
             }
             else
             {
-                EnabledGui();
-                ds_doi doiDangChoi = _entities.ds_doi.Find(_doiid);
-                lblThele.Visible = true;
-
-                if (_cauhoiid > 0)
+                if (_loadDS)
                 {
+                    VisibleGui();
 
+                    lblThele.Text = "Field of knowledge of the next question\r\n";
+                }
+                else
+                {
+                    EnabledGui();
+                    ds_doi doiDangChoi = _entities.ds_doi.Find(_doiid);
+                    lblThele.Visible = true;
 
-                    ds_goicauhoishining vd = _entities.ds_goicauhoishining.Find(_cauhoiid);
-                    _entities.Entry(vd).Reload(); // ⚠️ Nạp lại từ DB
-
-                    disPlayVeDich(_cauhoiid, (int)vd.vitri, _x2);
-                    loadNutDangChon(_cauhoiid, _x2);
-                    loadNutDaChon(_cauhoiid, _x2);
-                    // First update all question states based on database
-                    UpdateAllQuestionStates(_cauhoiid);
-                    //UpdateAllQuestionStates(_cauhoiid);
-                    lblThele.Text = "Question " + vd.vitri + ": (" + vd.sodiem + " points)";
-
-                    // Rest of your question display logic remains the same...
-                    if ((bool)!vd.isvideo)
+                    if (_cauhoiid > 0)
                     {
-                        lblNoiDungCauHoiVD.Visible = true;
-                        if (vd.noidungcauhoi.Length > 200)
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 18,FontStyle.Bold);
-                        }
-                        else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
 
-                        }
-                        else
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
 
-                        }
-                        lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
-                        axWinCauHoiHinhAnh.Visible = false;
-                        pbImage.Visible = false;
+                        ds_goicauhoishining vd = _entities.ds_goicauhoishining.Find(_cauhoiid);
+                        _entities.Entry(vd).Reload(); // ⚠️ Nạp lại từ DB
 
-                        if (_da)
+                        disPlayVeDich(_cauhoiid, (int)vd.vitri, _x2);
+                        loadNutDangChon(_cauhoiid, _x2);
+                        loadNutDaChon(_cauhoiid, _x2);
+                        // First update all question states based on database
+                        UpdateAllQuestionStates(_cauhoiid);
+                        //UpdateAllQuestionStates(_cauhoiid);
+                        lblThele.Text = "Question " + vd.vitri + ": (" + vd.sodiem + " points)";
+
+                        // Rest of your question display logic remains the same...
+                        if ((bool)!vd.isvideo)
                         {
-                            pbDapanCH.Visible = true;
-                            //pbDACH.Visible = false;
-                            lblDA1.Visible = true;
-                            //lblDA.Visible = false;
-                            lblDA1.Text = vd.dapan;
-                            if (vd.dapan.Length > 130)
+                            lblNoiDungCauHoiVD.Visible = true;
+                            if (vd.noidungcauhoi.Length > 200)
                             {
-                                lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
-
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 18, FontStyle.Bold);
                             }
-                            else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                            else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
                             {
-                                lblDA1.Text = vd.dapan;
-                                lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
+
                             }
                             else
                             {
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
+
+                            }
+                            lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
+                            axWinCauHoiHinhAnh.Visible = false;
+                            pbImage.Visible = false;
+
+                            if (_da)
+                            {
+                                pbDapanCH.Visible = true;
+                                //pbDACH.Visible = false;
+                                lblDA1.Visible = true;
+                                //lblDA.Visible = false;
                                 lblDA1.Text = vd.dapan;
-                                lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                if (vd.dapan.Length > 130)
+                                {
+                                    lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
+
+                                }
+                                else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                                {
+                                    lblDA1.Text = vd.dapan;
+                                    lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                }
+                                else
+                                {
+                                    lblDA1.Text = vd.dapan;
+                                    lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                }
+                            }
+                            else
+                            {
+                                //pbDACH.Visible = false;
+                                pbDapanCH.Visible = false;
+                                //lblDA.Visible = false;
+                                lblDA1.Visible = false;
                             }
                         }
                         else
                         {
-                            //pbDACH.Visible = false;
-                            pbDapanCH.Visible = false;
-                            //lblDA.Visible = false;
-                            lblDA1.Visible = false;
-                        }
-                    }
-                    else
-                    {
-                        if (_tt)
-                        {
+                            if (_tt)
+                            {
+                                if (vd.urlhinhanh != null && vd.urlhinhanh != "")
+                                {
+                                    var url = vd.urlhinhanh.Split('.');
+                                    if (url.Length > 0)
+                                    {
+                                        if (url[1] == "png" || url[1] == "jpg")
+                                        {
+                                            pbImage.Visible = true;
+                                            axWinCauHoiHinhAnh.Visible = false;
+
+                                            pbImage.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\pic\\" + vd.urlhinhanh);
+                                            pbImage.BackgroundImageLayout = ImageLayout.Stretch;
+                                            if (_da)
+                                            {
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = true;
+                                                //lblDA.Visible = false;
+                                                lblDA1.Visible = true;
+                                                var dapan = vd.dapan.Trim();
+                                                lblDA1.Text = vd.dapan;
+                                                if (vd.dapan.Length > 130)
+                                                {
+                                                    lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
+
+                                                }
+                                                else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                                }
+                                                else
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = false;
+                                                lblDA1.Visible = false;
+                                                //lblDA.Visible = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (_isVideoStart)
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = true;
+                                                axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
+                                                axWinCauHoiHinhAnh.Ctlcontrols.play();
+                                            }
+                                            else
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = false;
+                                                axWinCauHoiHinhAnh.Ctlcontrols.stop();
+                                            }
+
+                                            if (_da)
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = false;
+                                                axWinCauHoiHinhAnh.Ctlcontrols.stop();                                            //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = true;
+                                                //lblDA.Visible = false;
+                                                lblDA1.Visible = true;
+                                                lblDA1.Text = vd.dapan;
+                                                if (vd.dapan.Length > 130)
+                                                {
+                                                    lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
+
+                                                }
+                                                else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                                }
+                                                else
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = true;
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = false;
+                                                lblDA1.Visible = false;
+                                                //lblDA.Visible = false;
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                            lblNoiDungCauHoiVD.Visible = true;
+                            if (vd.noidungcauhoi.Length > 200)
+                            {
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 18, FontStyle.Bold);
+                            }
+                            else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
+                            {
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
+
+                            }
+                            else
+                            {
+                                lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
+
+                            }
+                            lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
+
                             if (vd.urlhinhanh != null && vd.urlhinhanh != "")
                             {
                                 var url = vd.urlhinhanh.Split('.');
@@ -146,13 +268,13 @@ namespace TS_Project
 
                                         pbImage.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\pic\\" + vd.urlhinhanh);
                                         pbImage.BackgroundImageLayout = ImageLayout.Stretch;
+
                                         if (_da)
                                         {
                                             //pbDACH.Visible = false;
                                             pbDapanCH.Visible = true;
                                             //lblDA.Visible = false;
                                             lblDA1.Visible = true;
-                                            var dapan = vd.dapan.Trim();
                                             lblDA1.Text = vd.dapan;
                                             if (vd.dapan.Length > 130)
                                             {
@@ -177,229 +299,120 @@ namespace TS_Project
                                             lblDA1.Visible = false;
                                             //lblDA.Visible = false;
                                         }
+
                                     }
                                     else
                                     {
+
+                                        pbImage.Visible = false;
+
                                         if (_isVideoStart)
                                         {
                                             axWinCauHoiHinhAnh.Visible = true;
                                             axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
                                             axWinCauHoiHinhAnh.Ctlcontrols.play();
+                                            axWinCauHoiHinhAnh.Ctlenabled = false;
+
+
+                                            if (_da)
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = false;
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = true;
+                                                //lblDA.Visible = false;
+                                                lblDA1.Visible = true;
+                                                lblDA1.Text = vd.dapan;
+                                                if (vd.dapan.Length > 130)
+                                                {
+                                                    lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
+
+                                                }
+                                                else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                                }
+                                                else
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                axWinCauHoiHinhAnh.Visible = true;
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = false;
+                                                lblDA1.Visible = false;
+                                                //lblDA.Visible = false;
+                                            }
+
                                         }
                                         else
                                         {
                                             axWinCauHoiHinhAnh.Visible = false;
+                                            axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
                                             axWinCauHoiHinhAnh.Ctlcontrols.stop();
-                                        }
-
-                                        if (_da)
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = false;
-                                            axWinCauHoiHinhAnh.Ctlcontrols.stop();                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = true;
-                                            //lblDA.Visible = false;
-                                            lblDA1.Visible = true;
-                                            lblDA1.Text = vd.dapan;
-                                            if (vd.dapan.Length > 130)
+                                            if (_da)
                                             {
-                                                lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
-
-                                            }
-                                            else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
-                                            {
+                                                axWinCauHoiHinhAnh.Visible = false;
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = true;
+                                                //lblDA.Visible = false;
+                                                lblDA1.Visible = true;
                                                 lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                                if (vd.dapan.Length > 130)
+                                                {
+                                                    lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
+
+                                                }
+                                                else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
+                                                }
+                                                else
+                                                {
+                                                    lblDA1.Text = vd.dapan;
+                                                    lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                                }
                                             }
                                             else
                                             {
-                                                lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
+                                                axWinCauHoiHinhAnh.Visible = false;
+                                                pbImage.Visible = false;
+                                                //pbDACH.Visible = false;
+                                                pbDapanCH.Visible = false;
+                                                lblDA1.Visible = false;
+                                                //lblDA.Visible = false;
                                             }
-                                        }
-                                        else
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = true;
-                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = false;
-                                            lblDA1.Visible = false;
-                                            //lblDA.Visible = false;
-                                        }
-                                    }
 
+
+                                        }
+
+
+                                    }
                                 }
-                            }
-                        }
-                        lblNoiDungCauHoiVD.Visible = true;
-                        if (vd.noidungcauhoi.Length > 200)
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 18, FontStyle.Bold);
-                        }
-                        else if (vd.noidungcauhoi.Length >= 1 && vd.noidungcauhoi.Length < 30)
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 24, FontStyle.Bold);
 
-                        }
-                        else
-                        {
-                            lblNoiDungCauHoiVD.Font = new Font("Arial", 20, FontStyle.Bold);
-
-                        }
-                        lblNoiDungCauHoiVD.Text = vd.noidungcauhoi;
-
-                        if (vd.urlhinhanh != null && vd.urlhinhanh != "")
-                        {
-                            var url = vd.urlhinhanh.Split('.');
-                            if (url.Length > 0)
-                            {
-                                if (url[1] == "png" || url[1] == "jpg")
-                                {
-                                    pbImage.Visible = true;
-                                    axWinCauHoiHinhAnh.Visible = false;
-
-                                    pbImage.BackgroundImage = System.Drawing.Image.FromFile(currentPath + "\\Resources\\pic\\" + vd.urlhinhanh);
-                                    pbImage.BackgroundImageLayout = ImageLayout.Stretch;
-
-                                    if (_da)
-                                    {
-                                        //pbDACH.Visible = false;
-                                        pbDapanCH.Visible = true;
-                                        //lblDA.Visible = false;
-                                        lblDA1.Visible = true;
-                                        lblDA1.Text = vd.dapan;
-                                        if (vd.dapan.Length > 130)
-                                        {
-                                            lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
-
-                                        }
-                                        else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
-                                        {
-                                            lblDA1.Text = vd.dapan;
-                                            lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
-                                        }
-                                        else
-                                        {
-                                            lblDA1.Text = vd.dapan;
-                                            lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        //pbDACH.Visible = false;
-                                        pbDapanCH.Visible = false;
-                                        lblDA1.Visible = false;
-                                        //lblDA.Visible = false;
-                                    }
-
-                                }
-                                else
-                                {
-
-                                    pbImage.Visible = false;
-
-                                    if (_isVideoStart)
-                                    {
-                                        axWinCauHoiHinhAnh.Visible = true;
-                                        axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
-                                        axWinCauHoiHinhAnh.Ctlcontrols.play();
-                                        axWinCauHoiHinhAnh.Ctlenabled = false;
-
-
-                                        if (_da)
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = false;
-                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = true;
-                                            //lblDA.Visible = false;
-                                            lblDA1.Visible = true;
-                                            lblDA1.Text = vd.dapan;
-                                            if (vd.dapan.Length > 130)
-                                            {
-                                                lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
-
-                                            }
-                                            else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
-                                            {
-                                                lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
-                                            }
-                                            else
-                                            {
-                                                lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = true;
-                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = false;
-                                            lblDA1.Visible = false;
-                                            //lblDA.Visible = false;
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        axWinCauHoiHinhAnh.Visible = false;
-                                        axWinCauHoiHinhAnh.URL = currentPath + "\\Resources\\Video\\" + vd.urlhinhanh;
-                                        axWinCauHoiHinhAnh.Ctlcontrols.stop();
-                                        if (_da)
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = false;
-                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = true;
-                                            //lblDA.Visible = false;
-                                            lblDA1.Visible = true;
-                                            lblDA1.Text = vd.dapan;
-                                            if (vd.dapan.Length > 130)
-                                            {
-                                                lblDA1.Font = new Font("Arial", 16, FontStyle.Bold);
-
-                                            }
-                                            else if (vd.dapan.Length > 2 && vd.dapan.Length < 10)
-                                            {
-                                                lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 26, FontStyle.Bold);
-                                            }
-                                            else
-                                            {
-                                                lblDA1.Text = vd.dapan;
-                                                lblDA1.Font = new Font("Arial", 22, FontStyle.Bold);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            axWinCauHoiHinhAnh.Visible = false;
-                                            pbImage.Visible = false;
-                                            //pbDACH.Visible = false;
-                                            pbDapanCH.Visible = false;
-                                            lblDA1.Visible = false;
-                                            //lblDA.Visible = false;
-                                        }
-
-
-                                    }
-
-
-                                }
                             }
 
+
+
+
+
+
                         }
-
-
-
-
-
 
                     }
-
+                    else
+                    {
+                        EnabledGui1();
+                        pbDapanCH.Visible = false;
+                        lblDA1.Visible = false;
+                    }
                 }
-                else
-                {
-                    EnabledGui1();
-                    pbDapanCH.Visible = false;
-                    lblDA1.Visible = false;
-                }
+                
+                
             }
         }
         // Danh sách các ID câu hỏi đã hiển thị trước đó

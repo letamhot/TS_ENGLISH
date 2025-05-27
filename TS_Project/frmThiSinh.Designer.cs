@@ -77,10 +77,10 @@
             this.lblThoiGian.BackColor = System.Drawing.Color.Transparent;
             this.lblThoiGian.Font = new System.Drawing.Font("Showcard Gothic", 50.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblThoiGian.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblThoiGian.Location = new System.Drawing.Point(92, 292);
+            this.lblThoiGian.Location = new System.Drawing.Point(68, 292);
             this.lblThoiGian.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblThoiGian.Name = "lblThoiGian";
-            this.lblThoiGian.Size = new System.Drawing.Size(172, 78);
+            this.lblThoiGian.Size = new System.Drawing.Size(222, 107);
             this.lblThoiGian.TabIndex = 0;
             this.lblThoiGian.Text = "END";
             this.lblThoiGian.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -90,10 +90,10 @@
             // 
             this.pnlNoiDung.BackColor = System.Drawing.Color.Transparent;
             this.pnlNoiDung.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlNoiDung.Location = new System.Drawing.Point(362, 222);
+            this.pnlNoiDung.Location = new System.Drawing.Point(362, 205);
             this.pnlNoiDung.Margin = new System.Windows.Forms.Padding(4);
             this.pnlNoiDung.Name = "pnlNoiDung";
-            this.pnlNoiDung.Size = new System.Drawing.Size(1004, 530);
+            this.pnlNoiDung.Size = new System.Drawing.Size(1004, 547);
             this.pnlNoiDung.TabIndex = 1;
             this.pnlNoiDung.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlNoiDung_Paint);
             // 

@@ -194,7 +194,7 @@ namespace TS_Project
                 Color hoverColor = Color.FromArgb(41, 128, 185);
                 Color dragOverColor = Color.FromArgb(46, 204, 113);
                 Color textColor = Color.White;
-                Font btnFont = new Font("Segoe UI", 10, FontStyle.Bold);
+                Font btnFont = new Font("Arial", 12, FontStyle.Bold);
 
                 int buttonWidth = flowPanelSentences.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 10;
 
