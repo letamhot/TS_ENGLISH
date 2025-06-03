@@ -550,6 +550,8 @@ namespace TS_Project
                             }
                             else if (spl[5] == "forceanswer")
                             {
+                                tmClient.Enabled = false;
+
                                 // Hiển thị đáp án khi thí sinh 1 trả lời đúng hoặc thí sinh 2 dành quyền
                                 TongDiemKD();
                                 da = true;
@@ -652,6 +654,10 @@ namespace TS_Project
 
                             if (spl[5] == "showanswer")
                             {
+                                tmClient.Enabled = false;
+                                thoiGianConLai = 20;
+                                lblThoiGian.Text = thoiGianConLai.ToString();
+
                                 // Hiển thị đáp án khi thí sinh 1 trả lời đúng hoặc thí sinh 2 dành quyền
                                 TongDiemKD();
                                 da = true;
@@ -661,6 +667,10 @@ namespace TS_Project
                             }
                             else if (spl[5] == "noanswer")
                             {
+                                tmClient.Enabled = false;
+                                thoiGianConLai = 20;
+                                lblThoiGian.Text = thoiGianConLai.ToString();
+
                                 // Không hiển thị đáp án khi thí sinh 1 trả lời sai
                                 TongDiemKD();
                                 da = false;
